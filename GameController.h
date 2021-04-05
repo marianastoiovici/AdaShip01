@@ -4,6 +4,7 @@ using namespace std;
 
 #include "Config.h"
 
+
 //Creates and sets up the game, controlling the overall program.
 class GameController {
   private:

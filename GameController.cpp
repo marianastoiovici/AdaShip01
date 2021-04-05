@@ -4,6 +4,7 @@
 using namespace std;
 
 #include "GameController.h"
+#include "Board.h"
 
 
 // Constructor for GameController.
@@ -48,6 +49,8 @@ void GameController::menu() {
 // Start a game
 void GameController::startGame() {
   cout<< "\n\t Starting the game! " << "\n";
+  Board board(rows, columns);
+  board.printMyBoard();
 //  cout<< "\n Board: " << rows << " x " << columns<< "\n";
 //  for (int i =0; i < boats.size(); i++ ){
 //  cout<< " Boat : " << boats[i].name << ", " << boats[i].length << "\n";
