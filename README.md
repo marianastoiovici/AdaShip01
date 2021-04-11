@@ -23,6 +23,7 @@ Once all points of a boat are hit, the boat is recorded to be sunk. The game end
     - [x] Can play with two human players
 - [] Add required functionalities from assignment
     - [x] Clearly indicate the current non-placed and placed ships
+    - [] Fix board to display ships differently
     - [] Add AI player
     - [] Add autoplacing for ships 
     

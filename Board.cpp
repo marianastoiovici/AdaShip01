@@ -142,7 +142,7 @@ bool Board::withinBoundary(string coordinate) //checks if given coordinate is wi
     return false;
   }
   else {
-    convertCoordinateToIndexes(coordinate);    // sets row and column indexes to point to given coordinate
+   convertCoordinateToIndexes(coordinate);    // sets row and column indexes to point to given coordinate
     if ((0 <= rowIndex && rowIndex <= 9) && (0 <= columnIndex && columnIndex <= 9)) {
       return true;    //if the indices are within the bounds of our board, we return true
     } else {
@@ -170,9 +170,7 @@ string Board::getDirectionInput(int index) {
 
 void Board::setupBoard() {   //sets up the board
   printMyBoard();
-
   string temp;
-
 
   myShips = new Ship[numberOfShips]; // create list of null ship objects
   int i = 0;
@@ -194,7 +192,7 @@ void Board::setupBoard() {   //sets up the board
       do {
         coordinate = getCoordinateInput(i);
         if (!withinBoundary(coordinate)) { //checks boundary and sets the indexes according to the given oordinate
-          std::cout << "\033[1;31mInvalid coordinate! Try again.\033[0m\n";
+          std::cout << "\n\033[1;31mInvalid coordinate! Try again.\033[0m\n";
         }
       } while (!withinBoundary(coordinate));    //runs until the user's coordinate is within the boundary
 
@@ -217,7 +215,6 @@ void Board::setupBoard() {   //sets up the board
           while (!validLocation) {  //runs until the location is valid
 
             if (noHorizontalCollision(coordinate, myShips[i].getLength())) {
-              convertCoordinateToIndexes(coordinate); // sets row and column indexes to point to given coordinate
               temp = coordinate;    //used to store and manipulate userGuess without changing userGuess
               for (int j = 0; j < myShips[i].getLength(); j++) {
                 myBoard[rowIndex][columnIndex + j] = ship;   //set tile to ship
@@ -231,9 +228,7 @@ void Board::setupBoard() {   //sets up the board
               validDirection = true;    //true to kick out of while loop
             } else
             {
-              printMyBoard();
-              printShips();
-              cout << "\033[1;31mInvalid location. Try again!\033[0m\n";
+              cout << "\n\033[1;31mInvalid location. Try again!\033[0m\n";
               coordinate = getCoordinateInput(i);
             }
           }
@@ -244,8 +239,6 @@ void Board::setupBoard() {   //sets up the board
 
           while (!validLocation) {
             if (noVerticalCollision(coordinate,myShips[i].getLength())) {
-              //i think this is already done in noverticall check
-              convertCoordinateToIndexes(coordinate); //pushing two int indexes back to orignal spot of user guess
               temp = coordinate;    //used to store and manipulate coordinate without changing it
               for (int j = 0; j < myShips[i].getLength(); j++) {
                 myBoard[rowIndex + j][columnIndex] = ship;
@@ -258,16 +251,12 @@ void Board::setupBoard() {   //sets up the board
               validLocation = true;
               validDirection = true;    //true to kick out of while loop
             } else {
-              printMyBoard();    //prints the updated board again and asks the user to try again
-              printShips();
-              cout << "\033[1;31mInvalid location. Try again!\033[0m\n";
+              cout << "\n\033[1;31mInvalid location. Try again!\033[0m\n";
               coordinate = getCoordinateInput(i);
             }
           }
         } else {  //if the input was not "V" or "v"
-          cout << "\033[1;31mInvalid Direction. Try again!\033[0m\n";
-          printMyBoard();    //prints the board again so that the user can try again
-          printShips();
+          cout << "\n\033[1;31mInvalid Direction. Try again!\033[0m\n";
           userDirection = getDirectionInput(i);
         }
       } while (!validDirection);    //runs until the user has inputed "H" or "h" or "V" or "v".
