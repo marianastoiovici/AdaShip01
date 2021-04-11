@@ -8,6 +8,7 @@ class Ship {
   string name;
   int length;
   int damage;
+  bool placed;
 
  public:
   Ship();
@@ -20,5 +21,7 @@ class Ship {
   string getCoordinate(int index) const;
   void increaseDamage();
   bool isSunk();
+  void setPlaced(bool newPlaced);
+  bool getPlaced() const;
 
 };

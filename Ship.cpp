@@ -6,6 +6,7 @@ Ship::Ship() {
   name = "";
   length = 0;
   damage = 0;
+  placed = false;
 }
 
 //Ship overloaded constructor
@@ -16,6 +17,7 @@ Ship::Ship(string name, int length)    //ship default constructor
   coordinates =
       new string[this->length]; //initialises coordinates to an array of strings of the ship's length
   damage = 0; //initialises damage variable to default value of 0
+  placed = false;
 }
 
 //ship destructor
@@ -56,4 +58,12 @@ bool Ship::isSunk() {
   } else {
     return false;   // ship isn't sunk
   }
+}
+
+bool Ship::getPlaced() const {
+  return placed;
+}
+
+void Ship::setPlaced(bool newPlaced) {
+  placed = newPlaced;
 }

@@ -58,6 +58,9 @@ Board();
 	bool noHorizontalCollision(string userGuess, int shipLength);
 	bool noVerticalCollision(string userGuess, int shipLength);
 	Ship* getShips() const;
+	void printShips();
+	string getCoordinateInput(int index);
+	string getDirectionInput(int index);
 };
 #endif
 

@@ -151,132 +151,141 @@ bool Board::withinBoundary(string coordinate) //checks if given coordinate is wi
   }
 }
 
+string Board::getCoordinateInput(int index) {
+  string coordinateInput;
+  cout<< "Enter coordinate of type \'A1\', \'E5\' to place your ship.\n";
+  cout << "Enter your left/top most coordinate for "<<  myShips[index].getName() << ": ";
+  getline(std::cin, coordinateInput);
+  transform(coordinateInput.begin(), coordinateInput.end(), coordinateInput.begin(), ::toupper);    //converts guess to uppercase
+  return coordinateInput;
+}
+
+string Board::getDirectionInput(int index) {
+  string directionInput;
+  cout << "HORIZONTAL(H/h) OR VERTICAL(V/v) orientation for " << myShips[index].getName() << " :";
+      getline(std::cin,
+              directionInput);    //takes in the user input of horizontal or vertical
+  return directionInput;
+}
+
 void Board::setupBoard() {   //sets up the board
   printMyBoard();
 
-  for (const auto&[name, length] : ships) {
-    cout << "Boat: " << name << ", " << length << "\n";
+  string temp;
+
+
+  myShips = new Ship[numberOfShips]; // create list of null ship objects
+  int i = 0;
+  for (const auto&[name, length] : ships) { // create ship objects and add them to the list of ships
+    Ship* shippy = new Ship(name, length);
+    myShips[i] = *shippy; // does this actually points to shippy????
+    i++;
   }
+  printShips(); // print the ships to the player
+
   string coordinate;
   string userDirection;    //("H" or "h" or "V" or "v") horizontal or vertical ship placement
-  bool validLocation = false;
-  string temp;
-  bool HorV = false; //gets set to true if the user types "H" or "h" or "V" or "v"
+  bool validLocation;
+  bool validDirection; // true if we'll get 'H' or 'h' for horizontal and 'V' or 'v' for vertical
 
-  myShips = new Ship[numberOfShips];
-  int num = 0;
-  for (const auto&[name, length] : ships) {
-    Ship* shippy = new Ship(name, length);
-    myShips[num] = *shippy; // does this actually points to shippy????
-
-    if (myShips[num].getLength() == 1) // you don't need to ask for direction
+  for (int i=0; i< numberOfShips; i++) {
+    if (myShips[i].getLength() == 1) // you don't need to ask for direction
     {
-      coordinate = "";    //reinitialize userGuess
       do {
-        cout
-            << "Where would you like to place "<< myShips[num].getName() << "? Enter your coordinate: ";
-        getline(std::cin, coordinate);    //takes in the user's input
-
-        transform(coordinate.begin(),
-                  coordinate.end(),
-                  coordinate.begin(),
-                  ::toupper);
-        if (!withinBoundary(coordinate))
-        {
-          std::cout << "Invalid coordinate! Try again.\n";
+        coordinate = getCoordinateInput(i);
+        if (!withinBoundary(coordinate)) { //checks boundary and sets the indexes according to the given oordinate
+          std::cout << "\033[1;31mInvalid coordinate! Try again.\033[0m\n";
         }
       } while (!withinBoundary(coordinate));    //runs until the user's coordinate is within the boundary
 
       myBoard[rowIndex][columnIndex] = ship;    //sets the user's guess location to a ship
-      myShips[num].addCoordinate(coordinate, 0);
+      myShips[i].addCoordinate(coordinate, 0);
+
+      myShips[i].setPlaced(true);
       printMyBoard();    //prints the newly updated board
+      printShips();
     } else // you need to ask for direction before setting the coordinates to ship
     {
-      cout << "HORIZONTAL(H/h) OR VERTICAL(V/v) orientation for " << myShips[num].getName() << " :";
-      getline(std::cin,
-              userDirection);    //takes in the user input of horizontal or vertical
-
+      userDirection = getDirectionInput(i);
       do {
-        HorV =
-            false;    //need to reinitialize to false so that each run through, this loop correclty runs
+     string coordinate;
+        validDirection =false;    //need to reinitialize to false so that each run through, this loop correclty runs
 
         if (userDirection == "H" || userDirection == "h") {
           validLocation = false;
-          cout << "Where would you like the left most coordinate of "<< myShips[num].getName() <<" to be? Enter your coordinate: ";
-          getline(std::cin, coordinate);
-          transform(coordinate.begin(),
-                    coordinate.end(),
-                    coordinate.begin(),
-                    ::toupper);    //converts guess to uppercase
+          coordinate = getCoordinateInput(i);
+          while (!validLocation) {  //runs until the location is valid
 
-          while (validLocation == false) {  //runs until the location is valid
-
-            if (noHorizontalCollision(coordinate, myShips[num].getLength())) {
+            if (noHorizontalCollision(coordinate, myShips[i].getLength())) {
               convertCoordinateToIndexes(coordinate); // sets row and column indexes to point to given coordinate
               temp = coordinate;    //used to store and manipulate userGuess without changing userGuess
-              for (int j = 0; j < myShips[num].getLength(); j++) {
+              for (int j = 0; j < myShips[i].getLength(); j++) {
                 myBoard[rowIndex][columnIndex + j] = ship;   //set tile to ship
-                myShips[num].addCoordinate(temp, j); // add coordinate to the ships coordinates
+                myShips[i].addCoordinate(temp, j); // add coordinate to the ships coordinates
                 temp[0] = temp.at(0) + 1; // moves to next one
               }
+              myShips[i].setPlaced(true);
               printMyBoard();    //prints the updated board
-              validLocation =
-                  true;    //sets valid location to true to help break out of loop
-              HorV = true;    //true to kick out of while loop
-            } else    //if the input was not "H" or "h"
+              printShips();
+              validLocation = true;    //sets valid location to true to help break out of loop
+              validDirection = true;    //true to kick out of while loop
+            } else
             {
               printMyBoard();
-              cout << "Invalid location. Try again!\n";
-              cout << "Where would you like the left most coordinate of "<< myShips[num].getName() <<" to be? Enter your coordinate: ";
-              getline(std::cin, coordinate);
-              transform(coordinate.begin(),
-                        coordinate.end(),
-                        coordinate.begin(),
-                        ::toupper);    //converts guess to uppercase
-
+              printShips();
+              cout << "\033[1;31mInvalid location. Try again!\033[0m\n";
+              coordinate = getCoordinateInput(i);
             }
           }
 
         } else if (userDirection == "V" || userDirection == "v") {
-          validLocation = false;
-          cout << "Where would you like the left most coordinate of "<< myShips[num].getName() <<" to be? Enter your coordinate: ";
-          getline(std::cin, coordinate);
-          transform(coordinate.begin(),
-                    coordinate.end(),
-                    coordinate.begin(),
-                    ::toupper);    //converts guess to uppercase
+         validLocation = false;
+          coordinate = getCoordinateInput(i);
 
-
-          while (validLocation == false) {
-            if (noVerticalCollision(coordinate,myShips[num].getLength())) {
+          while (!validLocation) {
+            if (noVerticalCollision(coordinate,myShips[i].getLength())) {
+              //i think this is already done in noverticall check
               convertCoordinateToIndexes(coordinate); //pushing two int indexes back to orignal spot of user guess
               temp = coordinate;    //used to store and manipulate coordinate without changing it
-              for (int j = 0; j < myShips[num].getLength(); j++) {
+              for (int j = 0; j < myShips[i].getLength(); j++) {
                 myBoard[rowIndex + j][columnIndex] = ship;
-                myShips[num].addCoordinate(temp, j);
+                myShips[i].addCoordinate(temp, j);
                 temp[1] = temp.at(1) + 1;
               }
+               myShips[i].setPlaced(true);
               printMyBoard();    //prints the updated board
+              printShips();
               validLocation = true;
-              HorV = true;    //true to kick out of while loop
+              validDirection = true;    //true to kick out of while loop
             } else {
               printMyBoard();    //prints the updated board again and asks the user to try again
-              cout << "Invalid location. Try again!\n";
-              cout << "Where would you like the left most coordinate of "<< myShips[num].getName() <<" to be? Enter your coordinate: ";
-              getline(std::cin, coordinate);
-              transform(coordinate.begin(), coordinate.end(), coordinate.begin(), ::toupper);    //converts guess to uppercase
+              printShips();
+              cout << "\033[1;31mInvalid location. Try again!\033[0m\n";
+              coordinate = getCoordinateInput(i);
             }
           }
         } else {  //if the input was not "V" or "v"
-          cout << "Invalid Direction. Try again!\n";
+          cout << "\033[1;31mInvalid Direction. Try again!\033[0m\n";
           printMyBoard();    //prints the board again so that the user can try again
-         cout << "HORIZONTAL(H/h) OR VERTICAL(V/v) orientation for " << myShips[num].getName() << " :";
-          getline(std::cin, userDirection);
+          printShips();
+          userDirection = getDirectionInput(i);
         }
-      } while (!HorV);    //runs until the user has inputed "H" or "h" or "V" or "v".
+      } while (!validDirection);    //runs until the user has inputed "H" or "h" or "V" or "v".
     }
-    num++;
+
   }
+
+}
+
+void Board::printShips() {
+  for (int i=0; i< numberOfShips; i++) {
+        if (myShips[i].getPlaced()){
+           cout << myShips[i].getName() << " of length " << myShips[i].getLength() << " is PLACED.\n";
+        } else {
+            cout << myShips[i].getName() << " of length " << myShips[i].getLength() << " is NOT PLACED.\n";
+      }
+  }
+  cout<< "\n\n";
 }
 
 bool Board::noHorizontalCollision(std::string userGuess, int shipLength) {
