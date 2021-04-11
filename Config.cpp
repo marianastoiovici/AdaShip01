@@ -103,7 +103,7 @@ bool Config::readBoard(string configLine, int index) {
 // reads the length of the boat from the config file
 bool Config::readBoats(string configLine, int index) {
   // variable to store a temporary instance of type boat
-  boat tempBoat;
+//  Ship::boat tempBoat;
   //skip the white spaces after ':'
   if (configLine[index] == ' ') {
     index++;
@@ -138,13 +138,20 @@ bool Config::readBoats(string configLine, int index) {
   // cout << "Boat's length is:  " << length  << "\n";
   cout << "Boat : " << name << ", " << length << "\n";
 
-  tempBoat.name = name;
-  tempBoat.length = stoi(length);
-  // add boat to our list of boats that needs to be placed on the board
-  this->boatsToPlace.push_back(tempBoat);
+//  tempBoat.name = name;
+//  tempBoat.length = stoi(length);
+//  // add boat to our list of boats that needs to be placed on the board
+//  this->boatsToPlace.push_back(tempBoat);
+
 //   for (int i =0; i < this->boatsToPlace.size(); i++ ){
 //     cout<< "we are here and name of boat is : " << this->boatsToPlace[i].name << " and length of boat is : " << this->boatsToPlace[i].length << "\n";
 //   }
+
+boatsToPlace[name] = stoi(length);
+map<string,int>::iterator it;
+for(it=boatsToPlace.begin(); it!=boatsToPlace.end();++it){
+  cout<<it->first<< " => " <<it->second << '\n';
+}
 
 
   return true;

@@ -1,19 +1,18 @@
 #include <string>
 #include <vector>
+#include <map>
+
 
 using namespace std;
 
-struct boat {
-  string name;
-  int length;
-};
 
 class Config {
   private:
     int rows; //board rows
     int columns; // board columns
 
-    vector<boat> boatsToPlace;
+//    vector<boat> boatsToPlace;
+map<string,int> boatsToPlace;
 
     // Reads the board's rows and columns and returns whether the action was successful or not
     bool readBoard(string configLine, int index);
@@ -40,7 +39,7 @@ class Config {
     }
 
     // Getter for list of boats to be placed on the board
-    vector<boat> getBoatsToPlace() {
+    map<string,int> getBoatsToPlace() {
       return boatsToPlace;
     }
 };

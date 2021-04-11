@@ -12,8 +12,10 @@ Once all points of a boat are hit, the boat is recorded to be sunk. The game end
 #### Tasks:
 - [] First version of a game working
     - [x] I can read the configuration from the adaship_config.ini file
-    ##### User stories:
     - [x] User can see the menu and select “One player vs Computer” or “Quit”
-    - [] When selecting “One player vs Computer” from the menu the user can see a board
-    
+    - [x] When selecting “One player vs Computer” from the menu the user can see a board
+    - [x] Print an opponent board
+    - [x] Move struct boat from config header to a boat header so all classes can import it
+    - [x] Replace the boat struct with a map<string,int> to hold the data about boats
+    - [x] Board class gets all info from GameController and prints 2 boards
     

@@ -1,16 +1,20 @@
 #include <string>
 #include <vector>
+#include <map>
 using namespace std;
 
+
 #include "Config.h"
+#include "Board.h"
 
 
-//Creates and sets up the game, controlling the overall program.
+//Creates and sets up the game, controlling the program.
 class GameController {
   private:
     int rows;
     int columns;
-    vector<boat> boats;
+//    vector<Ship::boat> boats;
+    map<string,int> boats;
 
     void startGame();
     void quit();
