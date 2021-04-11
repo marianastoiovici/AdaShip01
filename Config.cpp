@@ -8,7 +8,6 @@ using namespace std;
 
 //read the config file (adaship_config.ini) and returns whether this was completed successfully or not
 bool Config::readConfigFile() {
-  cout << "Reading the config file...\n";
   ifstream configFile;
   string configLine = "";
 
@@ -49,7 +48,6 @@ bool Config::readConfigFile() {
 
   // close the file
   configFile.close();
-  cout << "\nConfig file read and closed.\n\n";
 	return (boatsRead && boardRead);
 }
 
@@ -95,7 +93,7 @@ bool Config::readBoard(string configLine, int index) {
   if ((this->rows<5 || this->rows>80) || (this->columns<5 || this->columns>80)) {
     isBoardSizeValid = false;
   }
-  cout << "Board : " << this->rows << " x " << this->columns << "\n";
+//  cout << "Board : " << this->rows << " x " << this->columns << "\n";
   // cout << "\n isBoardSizeValid: " << isBoardSizeValid <<"\n";
   return isBoardSizeValid;
 }
@@ -136,7 +134,7 @@ bool Config::readBoats(string configLine, int index) {
     index++;
   }
   // cout << "Boat's length is:  " << length  << "\n";
-  cout << "Boat : " << name << ", " << length << "\n";
+//  cout << "Boat : " << name << ", " << length << "\n";
 
 //  tempBoat.name = name;
 //  tempBoat.length = stoi(length);
@@ -149,10 +147,8 @@ bool Config::readBoats(string configLine, int index) {
 
 boatsToPlace[name] = stoi(length);
 map<string,int>::iterator it;
-for(it=boatsToPlace.begin(); it!=boatsToPlace.end();++it){
-  cout<<it->first<< " => " <<it->second << '\n';
-}
-
-
+//for(it=boatsToPlace.begin(); it!=boatsToPlace.end();++it){
+//  cout<<it->first<< " => " <<it->second << '\n';
+//}
   return true;
 }

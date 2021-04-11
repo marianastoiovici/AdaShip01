@@ -10,20 +10,9 @@ GameController::GameController(Config config) {
   rows = config.getRows();
   columns = config.getColumns();
   configBoats = config.getBoatsToPlace();
-  //  player_1 = new Player(configBoats.size()); 		//create player 1 object passing in the number of boats
-//	player_2 = new Player(configBoats.size());		//create player 2 object passing in the number of boats
-//	gameOver = false;			//gameOver  variable set to false at the beginning of the game
-//	player_1Turn = 1;			//player_1Turn variable set to true, game starts with player 1's turn
-//
-//	cout <<"\nPlayer 1 place your ships\n";
-//	player_1 -> getBoard() -> setupBoard();
-//	cout <<"\nPlayer 2 place your ships\n";
-//	player_2 -> getBoard() -> setupBoard();
-//	play();
 }
 
-GameController::~GameController()
-{
+GameController::~GameController() {
   delete player_1;        //delete player1
   delete player_2;        //delete player2
 }
@@ -36,19 +25,17 @@ void GameController::menu() {
   while (true) {
     // display the options and get user's input
     string userInput = "";
+    cout << "\nPlease select one of the following options: ";
     cout << "\nMenu:\n";
     cout << "\t1 - One player v computer game\n";
     cout << "\tq - Quit\n";
-    cout << "\nPlease select one of the following options: ";
     getline(cin, userInput);
     if (userInput.length() == 1) {
       char choice = userInput[0];
       switch (choice) {
-        case '1':
-          setUpGame();
+        case '1':setUpGame();
           break;
-        case 'q':
-          quit();
+        case 'q':quit();
           break;
         default: cout << "Please enter a valid option.\n\n";
       }
@@ -60,27 +47,13 @@ void GameController::menu() {
 
 // Start a game
 void GameController::setUpGame() {
-  cout<< "\n\t Setting up the game! " << "\n";
+  cout << "\n\t Setting up the game! " << "\n";
   Board board(rows, columns, configBoats);
-//  board.printMyBoard();
-//  board.printOpponentBoard();
-  //  board.setupBoard();
 
-  cout<< "Board: " << rows << " x " << columns<< "\n";
-  for (const auto&[name, length] : configBoats){
-    cout<< "Boat: "<<  name <<", " << length << "\n";
-  }
-
-  player_1 = new Player(rows,
-                        columns,
-                        configBoats);        //create player 1 object passing in the number of boats
-  player_2 = new Player(rows,
-                        columns,
-                        configBoats);        //create player 2 object passing in the number of boats
-  gameOver =
-      false;            //gameOver member variable set to false at the beginning of the game
-  player_1Turn =
-      1;            //player_1Turn member boolean set to 1, game starts with player 1's turn
+  player_1 = new Player(rows, columns,configBoats);
+  player_2 = new Player(rows, columns,configBoats);
+  gameOver = false;
+  player_1Turn = 1;
 
   cout << "\nPlayer 1 place your ships\n";        //prompt player1 to place their ships
   player_1->getBoard()->setupBoard();                    //call getBoard and setupBoard from board.cpp to create the two boards for player1
@@ -88,29 +61,19 @@ void GameController::setUpGame() {
   cout << "\nPlayer 2 place your ships\n";        //promt player2 to place their ships
   player_2->getBoard()->setupBoard();                    //call getBoard and setupBoard from board.cpp to create the two boards for player2
   pause();
-
-//	BEFORE THE GAME LET'S CHECK EACH PLAYER AND EACH BOARD AND IT'S SHIPS
-
-//    cout<< "Player1 has this many ships: "<< "\n";
-//    Ship* ships = player_1->getBoard()->getShips();
-//    for ( int z=0; z<=ships->getLength(); z++){
-//      cout<< "ship[" <<z<<"] :"<< ships[z].getName() << ", "<< ships[z].getLength() << ", " <<"\n";
-//      for(int item=0; item<ships[z].getLength(); item++){
-//        cout<< ships[z].getCoordinate(item);
-//      }
-//    }
   play();
 }
 
 // Quit the game
 void GameController::quit() {
-    cout << "\nYou chose to quit the game. See you later !\n";
-    exit(EXIT_SUCCESS);
+  cout << "\nYou chose to quit the game. See you later !\n";
+  exit(EXIT_SUCCESS);
 
 }
 
 // TODO: give turn as input to refactor function
 void GameController::play() {
+  cout<< "Players are set. It's time to sgoot your targets. Good luck!"<< "\n";
   string target = "";
 
   while (!gameOver) {
@@ -134,8 +97,7 @@ void GameController::play() {
                 << "Invalid coordinate! Try again.\n"; //error if user inputs a string which length is not 2
           }
 
-        }
-        else {
+        } else {
           player_2->getBoard()->printMyBoard();
           player_2->getBoard()->printOpponentBoard();
           cout
@@ -151,13 +113,14 @@ void GameController::play() {
           }
         }
       }
-//      shoot(target);
+      shoot(target);
       if (player_1Turn % 2 == 1 && !gameOver) {
         cout << "PLAYER 1 TURN\n";
         player_1->getBoard()->printMyBoard();
         player_1->getBoard()->printOpponentBoard();
         pause();
-      } else if (player_1Turn % 2 == 0 && !gameOver)    //if it is player 2's turn
+      } else if (player_1Turn % 2 == 0
+          && !gameOver)    //if it is player 2's turn
       {
         cout << "PLAYER 2 TURN\n";
 
@@ -173,8 +136,7 @@ void GameController::play() {
     }
   }
 
-  if (player_1Turn % 2 == 1)
-  {
+  if (player_1Turn % 2 == 1) {
     player_2->getBoard()->printOpponentBoard();
     player_2->getBoard()->printMyBoard();
 
@@ -188,44 +150,43 @@ void GameController::play() {
 
 }
 
-//void GameController::shoot(string coordinate) // TODO: can add playerTurn param from play()
-//{
-////	int numberOfShips = player_1->getBoard()->getNumberOfShips(); //sets the number of ships
-//
-//  bool hit = false;
-//
-//  if (player_1Turn % 2 == 1) //daca este player1 turn
-//  {
-//    hit = player_2->getShot(coordinate); //check player_2 has a ship at the location or not
-//    player_1->shootCoordinate(coordinate, hit); //update hit marker for player_1
-//    checkGameOver(player_2);
-//  } else {
-//    hit = player_1->getShot(coordinate);
-//    player_2->shootCoordinate(coordinate, hit);
-//    checkGameOver(player_1);
-//  }
-//}
+void GameController::shoot(string coordinate) // TODO: can add playerTurn param from play()
+{
+  bool hit = false;
 
-//bool GameController::checkGameOver(Player* player) {
-//  int numberOfShips = player->getBoard()->getNumberOfShips();
-//  int sunkedShips = 0;
-//  while (sunkedShips != numberOfShips) {
-//    for (int i = 0; i < numberOfShips; i++) {
-//      if (player->getBoard()->getShips()[i].isSunk()) {
-//        sunkedShips++;
-//      }
-//    }
-//    if (sunkedShips == numberOfShips) {
-//      gameOver = true;
-//      break;
-//    } else {
-//      gameOver = false;
-//      break;
-//    }
-//  }
-//}
+  if (player_1Turn % 2 == 1) //daca este player1 turn
+  {
+    hit =
+        player_2->getShot(coordinate); //check player_2 has a ship at the location or not
+    player_1->shootCoordinate(coordinate, hit); //update hit marker for player_1
+    checkGameOver(player_2);
+  } else {
+    hit = player_1->getShot(coordinate);
+    player_2->shootCoordinate(coordinate, hit);
+    checkGameOver(player_1);
+  }
+}
 
-void GameController::pause()    //prints the intermission screen so player's can swap turns
+bool GameController::checkGameOver(Player* player) {
+  int numberOfShips = player->getBoard()->getNumberOfShips();
+  int sunkedShips = 0;
+  while (sunkedShips != numberOfShips) {
+    for (int i = 0; i < numberOfShips; i++) {
+      if (player->getBoard()->getShips()[i].isSunk()) {
+        sunkedShips++;
+      }
+    }
+    if (sunkedShips == numberOfShips) {
+      gameOver = true;
+      break;
+    } else {
+      gameOver = false;
+      break;
+    }
+  }
+}
+
+void GameController::pause()
 {
   cout << "Press Enter to let other player take its turn: ";
   cin.ignore(numeric_limits<streamsize>::max(),

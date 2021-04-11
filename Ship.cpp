@@ -34,7 +34,7 @@ string Ship::getName() const {
 }
 
 //function that sets the ship's coordinates at a given index, to a given coordinate
-void Ship::setCoordinate(std::string coordinate, int index) {
+void Ship::addCoordinate(std::string coordinate, int index) {
   coordinates[index] = coordinate;
 }
 

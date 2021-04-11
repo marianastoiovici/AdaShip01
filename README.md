@@ -10,7 +10,7 @@ They will then take turns to try and hit their opponent's boats. If the targeted
 Once all points of a boat are hit, the boat is recorded to be sunk. The game ends when one player sinks all of he's opponent's boats.
 
 #### Tasks:
-- [] First version of a game working
+- [X] First version of a game working
     - [x] I can read the configuration from the adaship_config.ini file
     - [x] User can see the menu and select “One player vs Computer” or “Quit”
     - [x] When selecting “One player vs Computer” from the menu the user can see a board
@@ -20,3 +20,11 @@ Once all points of a boat are hit, the boat is recorded to be sunk. The game end
     - [x] Board class gets all info from GameController and prints 2 boards
     - [x] GameController creates players - > players take a board objects with two grids -> grids have a list of ships
     - [x] Can setup ships on boards
+    - [x] Can play with two human players
+- [] Add required functionalities from assignment
+    - [] Add AI player
+    - [] Add autoplacing for ships 
+    
+    
+    
+    

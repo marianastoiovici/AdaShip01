@@ -16,7 +16,7 @@ class Ship {
 
   string getName() const;
   int getLength() const;
-  void setCoordinate(string coordinate, int index);
+  void addCoordinate(string coordinate, int index);
   string getCoordinate(int index) const;
   void increaseDamage();
   bool isSunk();
