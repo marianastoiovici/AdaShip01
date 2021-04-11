@@ -5,7 +5,7 @@ using namespace std;
 #include "GameController.h"
 
 // Constructor for GameController.
-GameController::GameController(Config config) {
+GameController::GameController(Config config) { // TODO review instance variables
   // set number of rows, columns and configBoats
   rows = config.getRows();
   columns = config.getColumns();
@@ -17,14 +17,14 @@ GameController::~GameController() {
   delete player_2;        //delete player2
 }
 // Display the menu
-void GameController::menu() {
+[[noreturn]] void GameController::menu() {
   cout << "\nWelcome to AdaShip Game!\n";
 
   // Show the menu and stop the program when user wants to quit
   //TODO: fix loop
   while (true) {
     // display the options and get user's input
-    string userInput = "";
+    string userInput;
     cout << "\nPlease select one of the following options: ";
     cout << "\nMenu:\n";
     cout << "\t1 - One player v computer game\n";
@@ -52,7 +52,6 @@ void GameController::setUpGame() {
 
   player_1 = new Player(rows, columns,configBoats);
   player_2 = new Player(rows, columns,configBoats);
-  gameOver = false;
   player_1Turn = 1;
 
   cout << "\nPlayer 1 place your ships\n";        //prompt player1 to place their ships
@@ -74,7 +73,7 @@ void GameController::quit() {
 // TODO: give turn as input to refactor function
 void GameController::play() {
   cout<< "Players are set. It's time to sgoot your targets. Good luck!"<< "\n";
-  string target = "";
+  string target;
 
   while (!gameOver) {
     try {
@@ -136,7 +135,7 @@ void GameController::play() {
     }
   }
 
-  if (player_1Turn % 2 == 1) {
+/*  if (player_1Turn % 2 == 1) {
     player_2->getBoard()->printOpponentBoard();
     player_2->getBoard()->printMyBoard();
 
@@ -146,11 +145,11 @@ void GameController::play() {
     player_1->getBoard()->printMyBoard();
 
     cout << "PLAYER 1 WINS!\n";
-  }
+  }*/
 
 }
 
-void GameController::shoot(string coordinate) // TODO: can add playerTurn param from play()
+void GameController::shoot(const string& coordinate) // TODO: can add playerTurn param from play()
 {
   bool hit = false;
 
@@ -167,7 +166,7 @@ void GameController::shoot(string coordinate) // TODO: can add playerTurn param 
   }
 }
 
-bool GameController::checkGameOver(Player* player) {
+void GameController::checkGameOver(Player* player) {
   int numberOfShips = player->getBoard()->getNumberOfShips();
   int sunkedShips = 0;
   while (sunkedShips != numberOfShips) {
@@ -176,11 +175,15 @@ bool GameController::checkGameOver(Player* player) {
         sunkedShips++;
       }
     }
-    if (sunkedShips == numberOfShips) {
-      gameOver = true;
-      break;
-    } else {
-      gameOver = false;
+    {
+      gameOver = sunkedShips == numberOfShips;
+      if (gameOver) {
+          if (player_1Turn % 2 == 1) {
+            cout << "PLAYER 1 WINS!\n";
+          } else {
+            cout << "PLAYER 2 WINS!\n";
+          }
+      }
       break;
     }
   }

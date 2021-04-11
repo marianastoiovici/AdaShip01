@@ -20,7 +20,7 @@ class Ship {
   void addCoordinate(string coordinate, int index);
   string getCoordinate(int index) const;
   void increaseDamage();
-  bool isSunk();
+  bool isSunk() const;
   void setPlaced(bool newPlaced);
   bool getPlaced() const;
 

@@ -15,23 +15,23 @@ class GameController {
     int columns;
     map<string,int> configBoats;
 
-    Player* player_1;		//player object for player1
-	Player* player_2;		//player object for player2
-	int player_1Turn; //true if player1 turn, false if player2 turn
-	bool gameOver;	//game over to stop the while loop once the game ends
+    Player* player_1{};		//player object for player1
+	Player* player_2{};		//player object for player2
+	int player_1Turn{}; //true if player1 turn, false if player2 turn
+	bool gameOver = false;	//game over to stop the while loop once the game ends
 
     void setUpGame();
-    void quit();
+    static void quit();
 
   public:
     // Constructor method for GameController.
-    GameController(Config config);
+    explicit GameController(Config config);
 
     ~GameController();
 
-    void menu();
-	void shoot(string coordinate);
+  [[noreturn]] void menu();
+	void shoot(const string& coordinate);
 	void play();
-	bool checkGameOver(Player* player);
-	void pause();
+	void checkGameOver(Player* player);
+	static void pause();
 };

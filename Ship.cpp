@@ -1,5 +1,7 @@
 #include "Ship.h"
 
+#include <utility>
+
 //Ship default constructor that initialises member variables with default values
 Ship::Ship() {
   coordinates = nullptr;
@@ -12,7 +14,7 @@ Ship::Ship() {
 //Ship overloaded constructor
 Ship::Ship(string name, int length)    //ship default constructor
 {
-  this->name = name; //initialises name variable to given name value
+  this->name = std::move(name); //initialises name variable to given name value
   this->length = length; //initialises length variable to given length value
   coordinates =
       new string[this->length]; //initialises coordinates to an array of strings of the ship's length
@@ -37,7 +39,7 @@ string Ship::getName() const {
 
 //function that sets the ship's coordinates at a given index, to a given coordinate
 void Ship::addCoordinate(std::string coordinate, int index) {
-  coordinates[index] = coordinate;
+  coordinates[index] = std::move(coordinate);
 }
 
 //function that gets the coordinate stored in coordinates at a given index
@@ -51,13 +53,9 @@ void Ship::increaseDamage() {
 }
 
 //function that returns true or false depending on if the ship is sunk or not
-bool Ship::isSunk() {
+bool Ship::isSunk() const {
   //if the damage equals the length of the ship
-  if (damage == length) {
-    return true;    //ship is sunk
-  } else {
-    return false;   // ship isn't sunk
-  }
+  return damage == length;
 }
 
 bool Ship::getPlaced() const {

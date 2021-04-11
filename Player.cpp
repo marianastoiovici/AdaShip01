@@ -1,6 +1,8 @@
 #include "Player.h"
 
-Player::Player(int rows, int columns, map<string, int> boats) {
+#include <utility>
+
+Player::Player(int rows, int columns, const map<string, int>& boats) {
   board = new Board(rows, columns, boats);
 }
 
@@ -9,10 +11,10 @@ Player::~Player() {
 }
 
 void Player::shootCoordinate(string coordinate, bool hit) {
-  board->updateOpponentBoard(coordinate, hit);
+  board->updateOpponentBoard(std::move(coordinate), hit);
 }
 
-bool Player::getShot(string coordinate) {
+bool Player::getShot(const string& coordinate) {
   if (board->withinBoundary(coordinate)) {
     return (board->updateMyBoard(coordinate));
   } else {

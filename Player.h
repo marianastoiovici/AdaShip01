@@ -8,9 +8,9 @@ class Player {
   Board* board = nullptr;
 
  public:
-  Player(int rows, int columns, map<string, int> boats);
+  Player(int rows, int columns, const map<string, int>& boats);
   ~Player();
   void shootCoordinate(string coordinate, bool hit);
-  bool getShot(string coordinate);
+  bool getShot(const string& coordinate);
   Board* getBoard() const;
 };
