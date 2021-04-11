@@ -3,10 +3,9 @@
 
 #include <iostream>
 #include <map>
-#include <vector>
-
-
 using namespace std;
+
+#include "Ship.h"
 
 #define MAX_ROWS 80
 #define MAX_COLUMNS 80
@@ -26,8 +25,8 @@ int numberOfShips;
 	string opponentBoard[MAX_ROWS][MAX_COLUMNS];
     //TODO: improve printing chars for columns when >10
 	string columnNames = "ABCDEFGHIJ";
-	int m_rowIndex;
-	int m_columnIndex;
+	int rowIndex;
+	int columnIndex;
 
     // types of tiles	TODO: improve with an enum to store these types
 	string blueTilde; // Empty tile
@@ -35,19 +34,30 @@ int numberOfShips;
 	string whiteMiss; // Missed tile
 	string ship; // Ship tile
 
+	Ship* myShips = nullptr;
 
 
 
   public:
-
+Board();
     // Board Constructor
 	Board(int rows, int columns, map<string,int> ships);
 
+    ~Board();
 
-
-    void printMyBoard();
     void printOpponentBoard();
+	void printMyBoard();
 
+
+	int getNumberOfShips() const;
+	void setupBoard();
+	void convertCoordinateToIndexes(string coordinate);
+//	void updateOpponentBoard(string userGuess, bool wasHit);
+//	bool updateMyBoard(string userGuess);
+	bool withinBoundary(string userGuess);
+	bool noHorizontalCollision(string userGuess, int shipLength);
+	bool noVerticalCollision(string userGuess, int shipLength);
+	Ship* getShips() const;
 };
 #endif
 

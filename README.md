@@ -18,4 +18,5 @@ Once all points of a boat are hit, the boat is recorded to be sunk. The game end
     - [x] Move struct boat from config header to a boat header so all classes can import it
     - [x] Replace the boat struct with a map<string,int> to hold the data about boats
     - [x] Board class gets all info from GameController and prints 2 boards
-    
+    - [x] GameController creates players - > players take a board objects with two grids -> grids have a list of ships
+    - [x] Can setup ships on boards
