@@ -1,6 +1,7 @@
 #include "Helpers.h"
 using namespace std;
 
+vector<string> Helpers::columnNames = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
 int Helpers::getRandomInt(int min, int max) {
   random_device rd;
   mt19937 mt(rd());
@@ -38,11 +39,19 @@ string Helpers::getCoordinateInput(string shipName) {
   return coordinateInput;
 }
 
-string Helpers:: getRandomCoordinate(int rows, int columns, vector<string> columnNames) {
+string Helpers:: getRandomCoordinate(int rows, int columns) {
   string randomCoordinate;
   int randomRow= Helpers::getRandomInt(0, rows - 1);
   int randomColumn = Helpers::getRandomInt(0, columns - 1);
   randomCoordinate = columnNames[randomColumn] + to_string(randomRow);
   cout << "Yuhuuu, my random coordinate is: " << randomCoordinate<<"\n";
   return randomCoordinate;
+}
+
+string Helpers::getTargetInput(){
+  string target;
+  cout << "Where would you like to shoot: ";
+  getline(cin, target);
+  transform(target.begin(), target.end(), target.begin(), ::toupper);
+  return target;
 }

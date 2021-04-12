@@ -20,7 +20,7 @@ class GameController {
 	int player_1Turn{}; //true if player1 turn, false if player2 turn
 	bool gameOver = false;	//game over to stop the while loop once the game ends
 
-    void setUpGame();
+    void startGame(bool ai);
     static void quit();
 
   public:
@@ -31,7 +31,7 @@ class GameController {
 
   [[noreturn]] void menu();
 	void shoot(const string& coordinate);
-	void play();
+	void play(bool ai);
 	void checkGameOver(Player* player);
 	static void pause();
 };

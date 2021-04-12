@@ -28,13 +28,16 @@ GameController::~GameController() {
     cout << "\nPlease select one of the following options: ";
     cout << "\nMenu:\n";
     cout << "\t1 - One player v computer game\n";
+    cout << "\t2 - Two player game\n";
     cout << "\tq - Quit\n";
     getline(cin, userInput);
     if (userInput.length() == 1) {
       char choice = userInput[0];
       switch (choice) {
-        case '1':setUpGame();
+        case '1':startGame(true);
           break;
+        case '2':startGame(false);
+        break;
         case 'q':quit();
           break;
         default: cout << "Please enter a valid option.\n\n";
@@ -46,10 +49,8 @@ GameController::~GameController() {
 }
 
 // Start a game
-void GameController::setUpGame() {
+void GameController::startGame(bool ai) {
   cout << "\n\t Setting up the game! " << "\n";
-  Board board(rows, columns, configBoats);
-
   player_1 = new Player(rows, columns,configBoats);
   player_2 = new Player(rows, columns,configBoats);
   player_1Turn = 1;
@@ -57,17 +58,29 @@ void GameController::setUpGame() {
   cout << "\nPlayer 1 place your ships\n";        //prompt player1 to place their ships
   player_1->getBoard()->initializeBoard();
   for ( int shipIndex = 0; shipIndex < player_1->getBoard()->getNumberOfShips(); shipIndex++){
-    player_1->getBoard()->placeShipAutomatically(shipIndex);
+    player_1->getBoard()->placeShipManually(shipIndex);
   }
   pause();
+
   cout << "\nPlayer 2 place your ships\n";        //promt player2 to place their ships
-  player_2->getBoard()->initializeBoard();                    //call getBoard and setupBoard from board.cpp to create the two boards for player2
-  for ( int shipIndex = 0; shipIndex < player_1->getBoard()->getNumberOfShips(); shipIndex++){
-    player_2->getBoard()->placeShipManually(shipIndex);
+  player_2->getBoard()->initializeBoard();
+  if(ai){
+    for ( int shipIndex = 0; shipIndex < player_1->getBoard()->getNumberOfShips(); shipIndex++){
+      player_2->getBoard()->placeShipAutomatically(shipIndex);
+    }
+    pause();
+    play(ai);
+  } else {
+    for ( int shipIndex = 0; shipIndex < player_1->getBoard()->getNumberOfShips(); shipIndex++){
+      player_2->getBoard()->placeShipManually(shipIndex);
+    }
+    pause();
+    play(ai);
   }
-  pause();
-  play();
+
+
 }
+
 
 // Quit the game
 void GameController::quit() {
@@ -77,8 +90,8 @@ void GameController::quit() {
 }
 
 // TODO: give turn as input to refactor function
-void GameController::play() {
-  cout<< "Players are set. It's time to sgoot your targets. Good luck!"<< "\n";
+void GameController::play(bool ai) {
+  cout<< "Players are set. It's time to shoot your targets. Good luck!"<< "\n";
   string target;
 
   while (!gameOver) {
@@ -86,16 +99,11 @@ void GameController::play() {
       target = "";
       while (target.length() != 2) {
         if (player_1Turn % 2 == 1) {
+          cout << "\n\n \033[1;31mPlayer 1's turn!\033[0m" << "\n";
           player_1->getBoard()->printMyGrid();
           player_1->getBoard()->printOpponentGrid();
-          cout
-              << "Player 1: Where would you like to shoot: "; //print player's board and opponent's board and ask for user a location to shoot
-
-          getline(cin, target);
-
-          transform(target.begin(), target.end(), target.begin(), ::toupper);
-
-          cout << "target: " << target << "\n";
+          cout << "\n\033[1;31mPlayer 1: \033[0m";
+          target = Helpers::getTargetInput();
 
           if (target.length() != 2) {
             cout
@@ -103,15 +111,23 @@ void GameController::play() {
           }
 
         } else {
-          player_2->getBoard()->printMyGrid();
-          player_2->getBoard()->printOpponentGrid();
-          cout
-              << "Player 2: Where would you like to shoot: "; //print player's board and opponent's board and ask for user a location to shoot
-          getline(cin, target);
-          transform(target.begin(),
-                    target.end(),
-                    target.begin(),
-                    ::toupper);    //converts guess to uppercase
+          if(ai){
+            cout << "\n\n \033[1;31mAi's turn!\033[0m" << "\n";
+            player_2->getBoard()->printMyGrid();
+            player_2->getBoard()->printOpponentGrid();
+            cout << "\n\033[1;31mAi: \033[0m";
+            target = Helpers::getRandomCoordinate(rows,columns);
+          } else {
+            cout << "\n\n \033[1;31mPlayer 2's turn!\033[0m" << "\n";
+            player_2->getBoard()->printMyGrid();
+            player_2->getBoard()->printOpponentGrid();
+            cout << "\n\033[1;31mPlayer 2: \033[0m";
+            target = Helpers::getTargetInput();
+          }
+
+
+
+// TODO: need to check if target is valid based oon how many columns I have , might be H14, so length is 3
           if (target.length() != 2) {
             cout
                 << "Invalid coordinate! Try again.\n";//error if user inputs a string which length is not 2

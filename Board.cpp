@@ -176,7 +176,7 @@ void Board::placeShipAutomatically(int index) {
       bool isValidCoordinate = false;
       do {
         if (isValidHorizontalDirection(direction)) {
-          coordinate = Helpers::getRandomCoordinate(rows, columns, columnNames);
+          coordinate = Helpers::getRandomCoordinate(rows, columns);
           while (!isValidCoordinate) {  //runs until the location is valid
             if (noHorizontalCollision(coordinate,myShips[index].getLength())) {
               string temp = coordinate;
@@ -192,12 +192,12 @@ void Board::placeShipAutomatically(int index) {
               isValidCoordinate = true;
               isValidDirection = true;
             } else {
-              coordinate = Helpers::getRandomCoordinate(rows, columns, columnNames);
+              coordinate = Helpers::getRandomCoordinate(rows, columns);
             }
           }
 
         } else if (isValidVerticalDirection(direction)) {
-          coordinate = Helpers::getRandomCoordinate(rows, columns, columnNames);
+          coordinate = Helpers::getRandomCoordinate(rows, columns);
 
           while (!isValidCoordinate) {
             if (noVerticalCollision(coordinate,
@@ -215,7 +215,7 @@ void Board::placeShipAutomatically(int index) {
               isValidCoordinate = true;
               isValidDirection = true;    //true to exit the while loop
             } else {
-              coordinate = Helpers::getRandomCoordinate(rows, columns, columnNames);
+              coordinate = Helpers::getRandomCoordinate(rows, columns);
             }
           }
         }
