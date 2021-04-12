@@ -7,6 +7,7 @@
 using namespace std;
 
 #include "Ship.h"
+#include "Helpers.h"
 
 #define MAX_ROWS 80
 #define MAX_COLUMNS 80
@@ -48,6 +49,7 @@ class Board {
   void printMyGrid();
   void initializeBoard();
   void placeShipManually(int shipIndex);
+  void placeShipAutomatically(int shipIndex);
   int getNumberOfShips() const;
   void convertCoordinateToIndexes(string coordinate);
   void updateOpponentGrid(string coordinate, bool wasHit);
@@ -57,6 +59,8 @@ class Board {
   bool noVerticalCollision(string userGuess, int shipLength);
   Ship* getShips() const;
   void printShips();
+  string getRandomCoordinate() const;
+  string getRandomDirection() const;
   string getCoordinateInput(int index);
   string getDirectionInput(int index);
   void createListOfShips();

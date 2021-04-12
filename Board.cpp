@@ -188,6 +188,90 @@ string Board::getDirectionInput(int index) {
           directionInput);    //takes in the user input of horizontal or vertical
   return directionInput;
 }
+void Board::placeShipAutomatically(int index) {
+
+  string coordinate;
+  if (!myShips[index].getPlaced()) {
+    string direction = getRandomDirection();
+      bool isValidDirection = false;
+      bool isValidCoordinate = false;
+      do {
+        if (isValidHorizontalDirection(direction)) {
+          coordinate = getRandomCoordinate();
+          while (!isValidCoordinate) {  //runs until the location is valid
+            if (noHorizontalCollision(coordinate,
+                                      myShips[index].getLength())) {
+              string temp =
+                  coordinate;    //used to store and manipulate userGuess without changing userGuess
+              for (int j = 0; j < myShips[index].getLength(); j++) {
+                myGrid[rowIndex][columnIndex + j] = ship;   //set tile to ship
+                myShips[index].addCoordinate(temp,
+                                             j); // add tempCoordinate to the ships coordinates
+                temp[0] = temp.at(0) + 1; // moves to next one
+              }
+              myShips[index].setPlaced(true);
+              printMyGrid();    //prints the updated board
+              printShips();
+              isValidCoordinate =
+                  true;    //sets valid location to true to help break out of loop
+              isValidDirection = true;    //true to kick out of while loop
+            } else {
+//              cout << "\n\033[1;31mInvalid location. Try again!\033[0m\n";
+              coordinate = getRandomCoordinate();
+            }
+          }
+
+        } else if (isValidVerticalDirection(direction)) {
+          coordinate = getRandomCoordinate();
+
+          while (!isValidCoordinate) {
+            if (noVerticalCollision(coordinate,
+                                    myShips[index].getLength())) {
+              string temp =
+                  coordinate;    //used to store and manipulate tempCoordinate without changing it
+              for (int j = 0; j < myShips[index].getLength(); j++) {
+                myGrid[rowIndex + j][columnIndex] = ship;
+                myShips[index].addCoordinate(temp, j);
+                temp[1] = temp.at(1) + 1;
+              }
+              myShips[index].setPlaced(true);
+              printMyGrid();
+              printShips();
+              isValidCoordinate = true;
+              isValidDirection = true;    //true to exit the while loop
+            } else {
+//              cout << "\n\033[1;31mInvalid location. Try again!\033[0m\n";
+              coordinate = getRandomCoordinate();
+            }
+          }
+        } else {  //if the input was not "V" or "v"
+//          cout << "\n\033[1;31mInvalid Direction. Try again!\033[0m\n";
+          direction = getRandomDirection();
+        }
+      } while (!isValidDirection);    //runs until the user has inputed "H" or "h" or "V" or "v".
+
+  }
+}
+
+string Board::getRandomDirection() const {
+  string randomDirection;
+  int randomInt= Helpers::getRandomInt(1, 2);
+  if (randomInt == 1){
+    return randomDirection= "H";
+  } else {
+    return randomDirection= "V";
+  }
+}
+
+string Board::getRandomCoordinate() const {
+  string randomCoordinate;
+  int randomRow= Helpers::getRandomInt(0, rows - 1);
+  int randomColumn = Helpers::getRandomInt(0, rows - 1);
+  randomCoordinate = columnNames[randomColumn] + to_string(randomRow);
+  cout << "Yuhuuu, my random coordinate is: " << randomCoordinate<<"\n";
+  return randomCoordinate;
+}
+
 
 void Board::placeShipManually(int index) {
 string coordinate;
