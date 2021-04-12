@@ -167,42 +167,19 @@ else if(coordinate.length() >=2  ) {
 }
 }
 
-string Board::getCoordinateInput(int index) {
-  string coordinateInput;
-  cout << "Enter coordinate of type \'A1\', \'E5\' to place your ship.\n";
-  cout << "Enter your left/top most coordinate for " << myShips[index].getName()
-       << ": ";
-  getline(std::cin, coordinateInput);
-  transform(coordinateInput.begin(),
-            coordinateInput.end(),
-            coordinateInput.begin(),
-            ::toupper);    //converts coordinate to uppercase
-  return coordinateInput;
-}
-
-string Board::getDirectionInput(int index) {
-  string directionInput;
-  cout << "HORIZONTAL(H/h) OR VERTICAL(V/v) orientation for "
-       << myShips[index].getName() << " :";
-  getline(std::cin,
-          directionInput);    //takes in the user input of horizontal or vertical
-  return directionInput;
-}
 void Board::placeShipAutomatically(int index) {
 
   string coordinate;
   if (!myShips[index].getPlaced()) {
-    string direction = getRandomDirection();
+    string direction = Helpers::getRandomDirection();
       bool isValidDirection = false;
       bool isValidCoordinate = false;
       do {
         if (isValidHorizontalDirection(direction)) {
-          coordinate = getRandomCoordinate();
+          coordinate = Helpers::getRandomCoordinate(rows, columns, columnNames);
           while (!isValidCoordinate) {  //runs until the location is valid
-            if (noHorizontalCollision(coordinate,
-                                      myShips[index].getLength())) {
-              string temp =
-                  coordinate;    //used to store and manipulate userGuess without changing userGuess
+            if (noHorizontalCollision(coordinate,myShips[index].getLength())) {
+              string temp = coordinate;
               for (int j = 0; j < myShips[index].getLength(); j++) {
                 myGrid[rowIndex][columnIndex + j] = ship;   //set tile to ship
                 myShips[index].addCoordinate(temp,
@@ -212,17 +189,15 @@ void Board::placeShipAutomatically(int index) {
               myShips[index].setPlaced(true);
               printMyGrid();    //prints the updated board
               printShips();
-              isValidCoordinate =
-                  true;    //sets valid location to true to help break out of loop
-              isValidDirection = true;    //true to kick out of while loop
+              isValidCoordinate = true;
+              isValidDirection = true;
             } else {
-//              cout << "\n\033[1;31mInvalid location. Try again!\033[0m\n";
-              coordinate = getRandomCoordinate();
+              coordinate = Helpers::getRandomCoordinate(rows, columns, columnNames);
             }
           }
 
         } else if (isValidVerticalDirection(direction)) {
-          coordinate = getRandomCoordinate();
+          coordinate = Helpers::getRandomCoordinate(rows, columns, columnNames);
 
           while (!isValidCoordinate) {
             if (noVerticalCollision(coordinate,
@@ -240,49 +215,26 @@ void Board::placeShipAutomatically(int index) {
               isValidCoordinate = true;
               isValidDirection = true;    //true to exit the while loop
             } else {
-//              cout << "\n\033[1;31mInvalid location. Try again!\033[0m\n";
-              coordinate = getRandomCoordinate();
+              coordinate = Helpers::getRandomCoordinate(rows, columns, columnNames);
             }
           }
-        } else {  //if the input was not "V" or "v"
-//          cout << "\n\033[1;31mInvalid Direction. Try again!\033[0m\n";
-          direction = getRandomDirection();
         }
+
       } while (!isValidDirection);    //runs until the user has inputed "H" or "h" or "V" or "v".
 
   }
 }
 
-string Board::getRandomDirection() const {
-  string randomDirection;
-  int randomInt= Helpers::getRandomInt(1, 2);
-  if (randomInt == 1){
-    return randomDirection= "H";
-  } else {
-    return randomDirection= "V";
-  }
-}
-
-string Board::getRandomCoordinate() const {
-  string randomCoordinate;
-  int randomRow= Helpers::getRandomInt(0, rows - 1);
-  int randomColumn = Helpers::getRandomInt(0, rows - 1);
-  randomCoordinate = columnNames[randomColumn] + to_string(randomRow);
-  cout << "Yuhuuu, my random coordinate is: " << randomCoordinate<<"\n";
-  return randomCoordinate;
-}
-
-
 void Board::placeShipManually(int index) {
 string coordinate;
 //TODO: do not ask for direction when ship length is 1
       //("H" or "h" or "V" or "v") horizontal or vertical ship placement
-      string direction = getDirectionInput(index);
+      string direction = Helpers::getDirectionInput(myShips[index].getName());
       bool isValidDirection = false;
       bool isValidCoordinate = false;
       do {
         if (isValidHorizontalDirection(direction)) {
-          coordinate = getCoordinateInput(index);
+          coordinate = Helpers::getCoordinateInput(myShips[index].getName());
           while (!isValidCoordinate) {  //runs until the location is valid
             if (noHorizontalCollision(coordinate,
                                       myShips[index].getLength())) {
@@ -302,12 +254,12 @@ string coordinate;
               isValidDirection = true;    //true to kick out of while loop
             } else {
               cout << "\n\033[1;31mInvalid location. Try again!\033[0m\n";
-              coordinate = getCoordinateInput(index);
+              coordinate = Helpers::getCoordinateInput(myShips[index].getName());
             }
           }
 
         } else if (isValidVerticalDirection(direction)) {
-          coordinate = getCoordinateInput(index);
+          coordinate = Helpers::getCoordinateInput(myShips[index].getName());
 
           while (!isValidCoordinate) {
             if (noVerticalCollision(coordinate,
@@ -326,12 +278,12 @@ string coordinate;
               isValidDirection = true;    //true to exit the while loop
             } else {
               cout << "\n\033[1;31mInvalid location. Try again!\033[0m\n";
-              coordinate = getCoordinateInput(index);
+              coordinate = Helpers::getCoordinateInput(myShips[index].getName());
             }
           }
         } else {  //if the input was not "V" or "v"
           cout << "\n\033[1;31mInvalid Direction. Try again!\033[0m\n";
-          direction = getDirectionInput(index);
+          direction = Helpers::getDirectionInput(myShips[index].getName());
         }
       } while (!isValidDirection);    //runs until the user has inputed "H" or "h" or "V" or "v".
 }
