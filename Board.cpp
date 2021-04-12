@@ -34,7 +34,7 @@ void Board::initializeBoard(){
 }
 
 void Board::printMyGrid() {    //prints the current player's board
-  cout << "\t\t\tYour board\n";
+  cout << "\t\t\t\033[1;32mYour board\033[0m\n";
   cout << setw(5);
   for (int i = 0; i < columns; i++) {
     cout << Helpers::columnNames[i] << "\t";    //prints the column names (A-J)
@@ -58,7 +58,7 @@ void Board::printMyGrid() {    //prints the current player's board
 //prints the current player's view of their opponents side
 void Board::printOpponentGrid() {
 
-  std::cout << "\n\t\t\tOpponent's board\n";
+  std::cout << "\n\t\t\t\033[1;32mOpponent's board\033[0m\n";
   cout << setw(5);
   for (int i = 0; i < columns; i++) {
     cout << Helpers::columnNames[i] << "\t";    //prints the column names (A-J)
@@ -118,7 +118,7 @@ bool Board::updateMyGrid(const string& coordinate) {
         if (myShips[i].getCoordinate(j) == coordinate) {
           myShips[i].increaseDamage();    //add damage counter to that ship
           if (myShips[i].isSunk()) {
-            std::cout << "SHIP SUNK!!!\n";
+            std::cout << "\033[1;32mSHIP SUNK!!!\033[0m\n";
           }
           break;
         }

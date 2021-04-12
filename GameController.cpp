@@ -6,27 +6,23 @@ using namespace std;
 
 // Constructor for GameController.
 GameController::GameController(Config config) { // TODO review instance variables
-  // set number of rows, columns and configBoats
   rows = config.getRows();
   columns = config.getColumns();
   configBoats = config.getBoatsToPlace();
 }
 
 GameController::~GameController() {
-  delete player_1;        //delete player1
-  delete player_2;        //delete player2
+  delete player_1;
+  delete player_2;
 }
 // Display the menu
 [[noreturn]] void GameController::menu() {
   cout << "\nWelcome to AdaShip Game!\n";
-
-  // Show the menu and stop the program when user wants to quit
   //TODO: fix loop
   while (true) {
     // display the options and get user's input
     string userInput;
-    cout << "\nPlease select one of the following options: ";
-    cout << "\nMenu:\n";
+    cout << "\nPlease select one of the following options: \n";
     cout << "\t1 - One player v computer game\n";
     cout << "\t2 - Two player game\n";
     cout << "\tq - Quit\n";
@@ -50,19 +46,19 @@ GameController::~GameController() {
 
 // Start a game
 void GameController::startGame(bool ai) {
-  cout << "\n\t Setting up the game! " << "\n";
-  player_1 = new Player(rows, columns,configBoats);
-  player_2 = new Player(rows, columns,configBoats);
   player_1Turn = 1;
+  cout << "\n\t Setting up the game! " << "\n";
 
-  cout << "\nPlayer 1 place your ships\n";        //prompt player1 to place their ships
+  player_1 = new Player(rows, columns,configBoats);
+  cout << "\n\033[1;32m Player 1 place your ships\033[0m\n";
   player_1->getBoard()->initializeBoard();
   for ( int shipIndex = 0; shipIndex < player_1->getBoard()->getNumberOfShips(); shipIndex++){
     player_1->getBoard()->placeShipManually(shipIndex);
   }
   pause();
 
-  cout << "\nPlayer 2 place your ships\n";        //promt player2 to place their ships
+  player_2 = new Player(rows, columns,configBoats);
+  cout << "\n\033[1;32m Player 2 place your ships \033[0m\n";
   player_2->getBoard()->initializeBoard();
   if(ai){
     for ( int shipIndex = 0; shipIndex < player_1->getBoard()->getNumberOfShips(); shipIndex++){
@@ -77,8 +73,6 @@ void GameController::startGame(bool ai) {
     pause();
     play(ai);
   }
-
-
 }
 
 
@@ -91,7 +85,7 @@ void GameController::quit() {
 
 // TODO: give turn as input to refactor function
 void GameController::play(bool ai) {
-  cout<< "Players are set. It's time to shoot your targets. Good luck!"<< "\n";
+  cout<< "\033[1;31mPlayers are set. It's time to shoot your targets. Good luck!\033[0m"<< "\n";
   string target;
 
   while (!gameOver) {

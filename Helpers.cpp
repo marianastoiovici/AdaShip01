@@ -23,7 +23,7 @@ string Helpers::getDirectionInput( string shipName) {
   cout << "HORIZONTAL(H/h) OR VERTICAL(V/v) orientation for "
        << shipName << " :";
   getline(std::cin,
-          directionInput);    //takes in the user input of horizontal or vertical
+          directionInput);
   return directionInput;
 }
 string Helpers::getCoordinateInput(string shipName) {
@@ -44,7 +44,6 @@ string Helpers:: getRandomCoordinate(int rows, int columns) {
   int randomRow= Helpers::getRandomInt(0, rows - 1);
   int randomColumn = Helpers::getRandomInt(0, columns - 1);
   randomCoordinate = columnNames[randomColumn] + to_string(randomRow);
-  cout << "Yuhuuu, my random coordinate is: " << randomCoordinate<<"\n";
   return randomCoordinate;
 }
 
@@ -60,6 +59,5 @@ string Helpers::charToString(char character){
   string myString;
   ss << character;
   ss >> myString;
-  cout<<"From helper :" << myString<<"\n";
   return myString;
 }
