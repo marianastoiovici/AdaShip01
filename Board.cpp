@@ -21,8 +21,8 @@ Board::Board(int rows, int columns, const map<string, int>& ships) {
 //  initialize board with all tiles empty
   for (int indexRows = 0; indexRows < rows; indexRows++) {
     for (int indexColumns = 0; indexColumns < columns; indexColumns++) {
-      myBoard[indexRows][indexColumns] = blueTilde;
-      opponentBoard[indexRows][indexColumns] = blueTilde;
+      myGrid[indexRows][indexColumns] = blueTilde;
+      opponentGrid[indexRows][indexColumns] = blueTilde;
     }
   }
 }
@@ -31,7 +31,7 @@ Board::~Board() {
   delete[] myShips;
 }
 
-void Board::printMyBoard() {    //prints the current player's board
+void Board::printMyGrid() {    //prints the current player's board
   cout << "\t\t\tYour board\n";
   cout << setw(5);
   for (int i = 0; i < columns; i++) {
@@ -46,7 +46,7 @@ void Board::printMyBoard() {    //prints the current player's board
       cout << setw(2) << x + 1;
     }
     for (int y = 0; y < columns; y++) {
-      cout << "\t" << myBoard[x][y];
+      cout << "\t" << myGrid[x][y];
     }
     cout << "\n";
   }
@@ -54,7 +54,8 @@ void Board::printMyBoard() {    //prints the current player's board
 }
 
 //prints the current player's view of their opponents side
-void Board::printOpponentBoard() {
+void Board::printOpponentGrid() {
+
   std::cout << "\n\t\t\tOpponent's board\n";
   cout << setw(5);
   for (int i = 0; i < columns; i++) {
@@ -69,7 +70,7 @@ void Board::printOpponentBoard() {
       cout << setw(2) << x + 1;
     }
     for (int y = 0; y < columns; y++) {
-      cout << "\t" << opponentBoard[x][y];
+      cout << "\t" << opponentGrid[x][y];
     }
     cout << "\n";
   }
@@ -97,17 +98,17 @@ void Board::convertCoordinateToIndexes(string coordinate) {
       - 1; //sets it to the intended column by subtracting 1 to get the proper index
 }
 
-bool Board::updateMyBoard(const string& coordinate) {
+bool Board::updateMyGrid(const string& coordinate) {
   convertCoordinateToIndexes(coordinate);    //updates rowIndex and columnIndex based on a given string coordinate
-  string tile = myBoard[rowIndex][columnIndex];
+  string tile = myGrid[rowIndex][columnIndex];
   if (tile == blueTilde) {
-    myBoard[rowIndex][columnIndex] = whiteMiss;
+    myGrid[rowIndex][columnIndex] = whiteMiss;
   } else if (tile == ship) {
-    myBoard[rowIndex][columnIndex] = redHit;
+    myGrid[rowIndex][columnIndex] = redHit;
     // loops through all ships to find the ship with the hit coordinate in order to increase its damage
     for (int i = 0; i < numberOfShips; i++) {
       for (int j = 0; j < myShips[i].getLength(); j++) {
-        cout << myShips[i].getCoordinate(j) << "\n";
+//        cout << myShips[i].getCoordinate(j) << "\n";
         if (myShips[i].getCoordinate(j) == coordinate) {
           myShips[i].increaseDamage();    //add damage counter to that ship
           if (myShips[i].isSunk()) {
@@ -126,12 +127,12 @@ bool Board::updateMyBoard(const string& coordinate) {
   return false;    //if there were no hits, then this runs and we return false because it was a miss
 }
 
-void Board::updateOpponentBoard(string coordinate, bool wasHit) {
+void Board::updateOpponentGrid(string coordinate, bool wasHit) {
   convertCoordinateToIndexes(std::move(coordinate)); // sets row and column indexes to point to given coordinate
   if (wasHit) {
-    opponentBoard[rowIndex][columnIndex] = redHit;
+    opponentGrid[rowIndex][columnIndex] = redHit;
   } else {
-    opponentBoard[rowIndex][columnIndex] = whiteMiss;
+    opponentGrid[rowIndex][columnIndex] = whiteMiss;
   }
 }
 
@@ -169,7 +170,7 @@ string Board::getDirectionInput(int index) {
 }
 
 void Board::setupBoard() {
-  printMyBoard();
+  printMyGrid();
   createListOfShips();
   printShips();
 
@@ -186,11 +187,11 @@ void Board::setupBoard() {
         }
       } while (!withinBoundary(coordinate));    //runs until the user's coordinate is within the boundary
 
-      myBoard[rowIndex][columnIndex] = ship;    //sets the user's guess location to a ship
+      myGrid[rowIndex][columnIndex] = ship;    //sets the user's guess location to a ship
       myShips[index].addCoordinate(coordinate, 0);
 
       myShips[index].setPlaced(true);
-      printMyBoard();    //prints the newly updated board
+      printMyGrid();    //prints the newly updated board
       printShips();
     } else // you need to ask for direction before setting the coordinates to ship
     {
@@ -207,13 +208,13 @@ void Board::setupBoard() {
               string temp =
                   coordinate;    //used to store and manipulate userGuess without changing userGuess
               for (int j = 0; j < myShips[index].getLength(); j++) {
-                myBoard[rowIndex][columnIndex + j] = ship;   //set tile to ship
+                myGrid[rowIndex][columnIndex + j] = ship;   //set tile to ship
                 myShips[index].addCoordinate(temp,
                                              j); // add tempCoordinate to the ships coordinates
                 temp[0] = temp.at(0) + 1; // moves to next one
               }
               myShips[index].setPlaced(true);
-              printMyBoard();    //prints the updated board
+              printMyGrid();    //prints the updated board
               printShips();
               isValidCoordinate =
                   true;    //sets valid location to true to help break out of loop
@@ -233,12 +234,12 @@ void Board::setupBoard() {
               string temp =
                   coordinate;    //used to store and manipulate tempCoordinate without changing it
               for (int j = 0; j < myShips[index].getLength(); j++) {
-                myBoard[rowIndex + j][columnIndex] = ship;
+                myGrid[rowIndex + j][columnIndex] = ship;
                 myShips[index].addCoordinate(temp, j);
                 temp[1] = temp.at(1) + 1;
               }
               myShips[index].setPlaced(true);
-              printMyBoard();
+              printMyGrid();
               printShips();
               isValidCoordinate = true;
               isValidDirection = true;    //true to exit the while loop
@@ -291,7 +292,7 @@ bool Board::noHorizontalCollision(std::string userGuess, int shipLength) {
     if ((0 <= rowIndex && rowIndex <= 9) && (0 <= columnIndex + i
         && columnIndex + i
             <= 9)) { //checks that all the next right indices are within the bounds
-      if (myBoard[rowIndex][columnIndex + i]
+      if (myGrid[rowIndex][columnIndex + i]
           != blueTilde) {   //returns false if at any time the next right indices are not blueTildes
         return false;
       }
@@ -308,7 +309,7 @@ bool Board::noVerticalCollision(std::string userGuess, int shipLength) {
     if ((0 <= rowIndex + i && rowIndex + i <= 9) && (0 <= columnIndex
         && columnIndex
             <= 9)) {   //checks that all the next below indices are within bounds
-      if (myBoard[rowIndex + i][columnIndex]
+      if (myGrid[rowIndex + i][columnIndex]
           != blueTilde) {   //returns false if at any time the next below indices are not blueTildes
         return false;
       }

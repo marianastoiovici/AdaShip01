@@ -11,12 +11,12 @@ Player::~Player() {
 }
 
 void Player::shootCoordinate(string coordinate, bool hit) {
-  board->updateOpponentBoard(std::move(coordinate), hit);
+  board->updateOpponentGrid(std::move(coordinate), hit);
 }
 
 bool Player::getShot(const string& coordinate) {
   if (board->withinBoundary(coordinate)) {
-    return (board->updateMyBoard(coordinate));
+    return (board->updateMyGrid(coordinate));
   } else {
     throw (runtime_error("Out of Board boundary! Please try again.\n"));
   }

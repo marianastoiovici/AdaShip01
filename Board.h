@@ -19,8 +19,8 @@ class Board {
   map<string, int> ships;
   int numberOfShips;
 
-  string myBoard[MAX_ROWS][MAX_COLUMNS]; // check https://stackoverflow.com/questions/3749660/how-to-resize-array-in-c
-  string opponentBoard[MAX_ROWS][MAX_COLUMNS];
+  string myGrid[MAX_ROWS][MAX_COLUMNS]; // check https://stackoverflow.com/questions/3749660/how-to-resize-array-in-c
+  string opponentGrid[MAX_ROWS][MAX_COLUMNS];
   //TODO: improve printing chars for columns when >10
   string columnNames = "ABCDEFGHIJ";
   int rowIndex{};
@@ -41,14 +41,14 @@ class Board {
 
   ~Board();
 
-  void printOpponentBoard();
-  void printMyBoard();
+  void printOpponentGrid();
+  void printMyGrid();
 
   int getNumberOfShips() const;
   void setupBoard();
   void convertCoordinateToIndexes(string coordinate);
-  void updateOpponentBoard(string coordinate, bool wasHit);
-  bool updateMyBoard(const string& userGuess);
+  void updateOpponentGrid(string coordinate, bool wasHit);
+  bool updateMyGrid(const string& userGuess);
   bool withinBoundary(const string& userGuess);
   bool noHorizontalCollision(string userGuess, int shipLength);
   bool noVerticalCollision(string userGuess, int shipLength);

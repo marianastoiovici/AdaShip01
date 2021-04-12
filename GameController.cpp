@@ -80,8 +80,8 @@ void GameController::play() {
       target = "";
       while (target.length() != 2) {
         if (player_1Turn % 2 == 1) {
-          player_1->getBoard()->printMyBoard();
-          player_1->getBoard()->printOpponentBoard();
+          player_1->getBoard()->printMyGrid();
+          player_1->getBoard()->printOpponentGrid();
           cout
               << "Player 1: Where would you like to shoot: "; //print player's board and opponent's board and ask for user a location to shoot
 
@@ -97,8 +97,8 @@ void GameController::play() {
           }
 
         } else {
-          player_2->getBoard()->printMyBoard();
-          player_2->getBoard()->printOpponentBoard();
+          player_2->getBoard()->printMyGrid();
+          player_2->getBoard()->printOpponentGrid();
           cout
               << "Player 2: Where would you like to shoot: "; //print player's board and opponent's board and ask for user a location to shoot
           getline(cin, target);
@@ -115,16 +115,16 @@ void GameController::play() {
       shoot(target);
       if (player_1Turn % 2 == 1 && !gameOver) {
         cout << "PLAYER 1 TURN\n";
-        player_1->getBoard()->printMyBoard();
-        player_1->getBoard()->printOpponentBoard();
+        player_1->getBoard()->printMyGrid();
+        player_1->getBoard()->printOpponentGrid();
         pause();
       } else if (player_1Turn % 2 == 0
           && !gameOver)    //if it is player 2's turn
       {
         cout << "PLAYER 2 TURN\n";
 
-        player_2->getBoard()->printMyBoard();
-        player_2->getBoard()->printOpponentBoard();
+        player_2->getBoard()->printMyGrid();
+        player_2->getBoard()->printOpponentGrid();
         pause();
       }
 
@@ -137,12 +137,12 @@ void GameController::play() {
 
 /*  if (player_1Turn % 2 == 1) {
     player_2->getBoard()->printOpponentBoard();
-    player_2->getBoard()->printMyBoard();
+    player_2->getBoard()->printMyGrid();
 
     cout << "PLAYER 2 WINS!\n";
   } else {
     player_1->getBoard()->printOpponentBoard();
-    player_1->getBoard()->printMyBoard();
+    player_1->getBoard()->printMyGrid();
 
     cout << "PLAYER 1 WINS!\n";
   }*/
