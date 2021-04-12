@@ -9,6 +9,7 @@ class Ship {
   int length;
   int damage;
   bool placed;
+  string sign;
 
  public:
   Ship();
@@ -23,5 +24,5 @@ class Ship {
   bool isSunk() const;
   void setPlaced(bool newPlaced);
   bool getPlaced() const;
-
+  string getSign() const;
 };

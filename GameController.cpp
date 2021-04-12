@@ -157,18 +157,6 @@ void GameController::play(bool ai) {
     }
   }
 
-/*  if (player_1Turn % 2 == 1) {
-    player_2->getBoard()->printOpponentBoard();
-    player_2->getBoard()->printMyGrid();
-
-    cout << "PLAYER 2 WINS!\n";
-  } else {
-    player_1->getBoard()->printOpponentBoard();
-    player_1->getBoard()->printMyGrid();
-
-    cout << "PLAYER 1 WINS!\n";
-  }*/
-
 }
 
 void GameController::shoot(const string& coordinate) // TODO: can add playerTurn param from play()

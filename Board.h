@@ -17,15 +17,12 @@ class Board {
  private:
   int rows;
   int columns;
-//    vector<boat> boats;
   map<string, int> ships;
   int numberOfShips;
 
   string myGrid[MAX_ROWS][MAX_COLUMNS]; // check https://stackoverflow.com/questions/3749660/how-to-resize-array-in-c
   string opponentGrid[MAX_ROWS][MAX_COLUMNS];
-  //TODO: improve printing chars for columns when >10
-//  string columnNames = "ABCDEFGHIJ";
-  vector<string> columnNames = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+
   int rowIndex{};
   int columnIndex{};
 

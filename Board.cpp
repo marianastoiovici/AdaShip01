@@ -13,15 +13,6 @@ Board::Board(int rows, int columns, const map<string, int>& ships) {
   this->columns = columns;
   this->ships = ships;
   this->numberOfShips = ships.size();
-
-////  initialize board with all tiles empty
-//  for (int indexRows = 0; indexRows < rows; indexRows++) {
-//    for (int indexColumns = 0; indexColumns < columns; indexColumns++) {
-//      myGrid[indexRows][indexColumns] = blueTilde;
-//      opponentGrid[indexRows][indexColumns] = blueTilde;
-//    }
-//  }
-
 }
 
 Board::~Board() {
@@ -46,7 +37,7 @@ void Board::printMyGrid() {    //prints the current player's board
   cout << "\t\t\tYour board\n";
   cout << setw(5);
   for (int i = 0; i < columns; i++) {
-    cout << columnNames[i] << "\t";    //prints the column names (A-J)
+    cout << Helpers::columnNames[i] << "\t";    //prints the column names (A-J)
   }
   cout << endl;
 
@@ -70,7 +61,7 @@ void Board::printOpponentGrid() {
   std::cout << "\n\t\t\tOpponent's board\n";
   cout << setw(5);
   for (int i = 0; i < columns; i++) {
-    cout << columnNames[i] << "\t";    //prints the column names (A-J)
+    cout << Helpers::columnNames[i] << "\t";    //prints the column names (A-J)
   }
   cout << endl;
 
@@ -94,9 +85,9 @@ void Board::convertCoordinateToIndexes(string coordinate) {
     return;
   }
   else if(coordinate.length() >=2  ) {
-    for (int i = 0; i <= columnNames.size(); i++) {
+    for (int i = 0; i <= Helpers::columnNames.size(); i++) {
       s = coordinate.at(0);
-      if (s == columnNames[i]) {
+      if (s == Helpers::columnNames[i]) {
         columnIndex = i;
         coordinate.erase(0,1);
         break;
@@ -118,7 +109,7 @@ bool Board::updateMyGrid(const string& coordinate) {
   string tile = myGrid[rowIndex][columnIndex];
   if (tile == blueTilde) {
     myGrid[rowIndex][columnIndex] = whiteMiss;
-  } else if (tile == ship) {
+  } else if (tile != whiteMiss || tile != redHit) {
     myGrid[rowIndex][columnIndex] = redHit;
     // loops through all ships to find the ship with the hit coordinate in order to increase its damage
     for (int i = 0; i < numberOfShips; i++) {
@@ -181,7 +172,7 @@ void Board::placeShipAutomatically(int index) {
             if (noHorizontalCollision(coordinate,myShips[index].getLength())) {
               string temp = coordinate;
               for (int j = 0; j < myShips[index].getLength(); j++) {
-                myGrid[rowIndex][columnIndex + j] = ship;   //set tile to ship
+                myGrid[rowIndex][columnIndex + j] = myShips[index].getSign();   //set tile to ship
                 myShips[index].addCoordinate(temp,
                                              j); // add tempCoordinate to the ships coordinates
                 temp[0] = temp.at(0) + 1; // moves to next one
@@ -205,7 +196,7 @@ void Board::placeShipAutomatically(int index) {
               string temp =
                   coordinate;    //used to store and manipulate tempCoordinate without changing it
               for (int j = 0; j < myShips[index].getLength(); j++) {
-                myGrid[rowIndex + j][columnIndex] = ship;
+                myGrid[rowIndex + j][columnIndex] = myShips[index].getSign();
                 myShips[index].addCoordinate(temp, j);
                 temp[1] = temp.at(1) + 1;
               }
@@ -241,7 +232,7 @@ string coordinate;
               string temp =
                   coordinate;    //used to store and manipulate userGuess without changing userGuess
               for (int j = 0; j < myShips[index].getLength(); j++) {
-                myGrid[rowIndex][columnIndex + j] = ship;   //set tile to ship
+                myGrid[rowIndex][columnIndex + j] = myShips[index].getSign();   //set tile to ship
                 myShips[index].addCoordinate(temp,
                                              j); // add tempCoordinate to the ships coordinates
                 temp[0] = temp.at(0) + 1; // moves to next one
@@ -267,7 +258,7 @@ string coordinate;
               string temp =
                   coordinate;    //used to store and manipulate tempCoordinate without changing it
               for (int j = 0; j < myShips[index].getLength(); j++) {
-                myGrid[rowIndex + j][columnIndex] = ship;
+                myGrid[rowIndex + j][columnIndex] = myShips[index].getSign();
                 myShips[index].addCoordinate(temp, j);
                 temp[1] = temp.at(1) + 1;
               }

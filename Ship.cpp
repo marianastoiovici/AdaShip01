@@ -1,4 +1,5 @@
 #include "Ship.h"
+#include "Helpers.h"
 
 #include <utility>
 
@@ -9,17 +10,20 @@ Ship::Ship() {
   length = 0;
   damage = 0;
   placed = false;
+  sign="";
 }
 
 //Ship overloaded constructor
 Ship::Ship(string name, int length)    //ship default constructor
 {
-  this->name = std::move(name); //initialises name variable to given name value
+  this->name = name; //initialises name variable to given name value
   this->length = length; //initialises length variable to given length value
   coordinates =
       new string[this->length]; //initialises coordinates to an array of strings of the ship's length
   damage = 0; //initialises damage variable to default value of 0
   placed = false;
+
+  sign = Helpers::charToString(name.at(0));
 }
 
 //ship destructor
@@ -32,6 +36,10 @@ int Ship::getLength() const {
   return length;
 }
 
+//function that returns the length of a ship
+string Ship::getSign() const {
+  return sign;
+}
 //function that returns the name of a ship
 string Ship::getName() const {
   return name;

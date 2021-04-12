@@ -55,3 +55,11 @@ string Helpers::getTargetInput(){
   transform(target.begin(), target.end(), target.begin(), ::toupper);
   return target;
 }
+string Helpers::charToString(char character){
+  stringstream ss;
+  string myString;
+  ss << character;
+  ss >> myString;
+  cout<<"From helper :" << myString<<"\n";
+  return myString;
+}
