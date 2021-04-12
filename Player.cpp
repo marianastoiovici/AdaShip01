@@ -24,5 +24,6 @@ bool Player::getShot(const string& coordinate) {
 }
 
 Board* Player::getBoard() const {
+
   return board;
 }

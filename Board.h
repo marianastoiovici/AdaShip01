@@ -46,9 +46,9 @@ class Board {
 
   void printOpponentGrid();
   void printMyGrid();
-
+  void initializeBoard();
+  void placeShipManually(int shipIndex);
   int getNumberOfShips() const;
-  void setupBoard();
   void convertCoordinateToIndexes(string coordinate);
   void updateOpponentGrid(string coordinate, bool wasHit);
   bool updateMyGrid(const string& userGuess);

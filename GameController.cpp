@@ -55,10 +55,14 @@ void GameController::setUpGame() {
   player_1Turn = 1;
 
   cout << "\nPlayer 1 place your ships\n";        //prompt player1 to place their ships
-  player_1->getBoard()->setupBoard();                    //call getBoard and setupBoard from board.cpp to create the two boards for player1
+  player_1->getBoard()->initializeBoard();
+//  player_1->getBoard()->setupBoard();//call getBoard and setupBoard from board.cpp to create the two boards for player1
+  for ( int shipIndex = 0; shipIndex < player_1->getBoard()->getNumberOfShips(); shipIndex++){
+    player_1->getBoard()->placeShipManually(shipIndex);
+  }
   pause();
   cout << "\nPlayer 2 place your ships\n";        //promt player2 to place their ships
-  player_2->getBoard()->setupBoard();                    //call getBoard and setupBoard from board.cpp to create the two boards for player2
+  player_2->getBoard()->initializeBoard();                    //call getBoard and setupBoard from board.cpp to create the two boards for player2
   pause();
   play();
 }

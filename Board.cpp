@@ -14,17 +14,32 @@ Board::Board(int rows, int columns, const map<string, int>& ships) {
   this->ships = ships;
   this->numberOfShips = ships.size();
 
-//  initialize board with all tiles empty
+////  initialize board with all tiles empty
+//  for (int indexRows = 0; indexRows < rows; indexRows++) {
+//    for (int indexColumns = 0; indexColumns < columns; indexColumns++) {
+//      myGrid[indexRows][indexColumns] = blueTilde;
+//      opponentGrid[indexRows][indexColumns] = blueTilde;
+//    }
+//  }
+
+}
+
+Board::~Board() {
+  delete[] myShips;
+}
+
+void Board::initializeBoard(){
+  //  initialize board with all tiles empty
   for (int indexRows = 0; indexRows < rows; indexRows++) {
     for (int indexColumns = 0; indexColumns < columns; indexColumns++) {
       myGrid[indexRows][indexColumns] = blueTilde;
       opponentGrid[indexRows][indexColumns] = blueTilde;
     }
   }
-}
+  printMyGrid();
+  createListOfShips();
+  printShips();
 
-Board::~Board() {
-  delete[] myShips;
 }
 
 void Board::printMyGrid() {    //prints the current player's board
@@ -174,33 +189,9 @@ string Board::getDirectionInput(int index) {
   return directionInput;
 }
 
-void Board::setupBoard() {
-  printMyGrid();
-  createListOfShips();
-  printShips();
-
-  string coordinate;
-  bool isValidCoordinate;
-
-  for (int index = 0; index < numberOfShips; index++) {
-    if (myShips[index].getLength() == 1) // you don't need to ask for direction
-    {
-      do {
-        coordinate = getCoordinateInput(index);
-//        TODO: fix bug: when length is 1 I don't check for any collisions??
-        if (!withinBoundary(coordinate)) { //checks boundary and sets the indexes according to the given oordinate
-          std::cout << "\n\033[1;31mInvalid coordinate! Try again.\033[0m\n";
-        }
-      } while (!withinBoundary(coordinate));    //runs until the user's coordinate is within the boundary
-
-      myGrid[rowIndex][columnIndex] = ship;    //sets the user's guess location to a ship
-      myShips[index].addCoordinate(coordinate, 0);
-
-      myShips[index].setPlaced(true);
-      printMyGrid();    //prints the newly updated board
-      printShips();
-    } else // you need to ask for direction before setting the coordinates to ship
-    {
+void Board::placeShipManually(int index) {
+string coordinate;
+//TODO: do not ask for direction when ship length is 1
       //("H" or "h" or "V" or "v") horizontal or vertical ship placement
       string direction = getDirectionInput(index);
       bool isValidDirection = false;
@@ -259,11 +250,8 @@ void Board::setupBoard() {
           direction = getDirectionInput(index);
         }
       } while (!isValidDirection);    //runs until the user has inputed "H" or "h" or "V" or "v".
-    }
-
-  }
-
 }
+
 bool Board::isValidVerticalDirection(const string& direction) const { return direction == "V" || direction == "v"; }
 
 bool Board::isValidHorizontalDirection(const string& direction) const { return direction == "H" || direction == "h"; }
