@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sstream>
+
 #include <iomanip>
 #include <utility>
 #include "algorithm" //for transform
@@ -11,12 +13,6 @@ Board::Board(int rows, int columns, const map<string, int>& ships) {
   this->columns = columns;
   this->ships = ships;
   this->numberOfShips = ships.size();
-
-  blueTilde = "\033[1;36m~\033[0m";    //sets the color of ~ to blue
-  redHit = "\033[1;31mX\033[0m";    //sets the color of X to red
-  whiteMiss = "\033[1;37mO\033[0m";        //sets the color of O to white
-//  TODO: differentiate ships on board?
-  ship = "\033[1;32m∆\033[0m";    //sets the color of ship (∆) to green
 
 //  initialize board with all tiles empty
   for (int indexRows = 0; indexRows < rows; indexRows++) {
@@ -78,24 +74,28 @@ void Board::printOpponentGrid() {
 }
 
 void Board::convertCoordinateToIndexes(string coordinate) {
-  if (coordinate.length() != 2) {
-    return; // TODO: resolve bug where userGuess == 1 and program doesn't ask for another coordinate
-  } else {
-    for (int i = 0; i < columnNames.length(); i++) {
-      if (coordinate.at(0) == columnNames.at(i)
-          || coordinate.at(0) == (tolower(columnNames.at(i)))) {
+  string s;
+  if( coordinate.length() > 3 ){
+    return;
+  }
+  else if(coordinate.length() >=2  ) {
+    for (int i = 0; i <= columnNames.size(); i++) {
+      s = coordinate.at(0);
+      if (s == columnNames[i]) {
         columnIndex = i;
+        coordinate.erase(0,1);
         break;
-      } else {
-        columnIndex = 9;
       }
     }
-  }
 
-  // convert coordinate at second index to decimal
-  int temp = coordinate.at(1) - '0';
-  rowIndex = temp
-      - 1; //sets it to the intended column by subtracting 1 to get the proper index
+  } else {
+    return;
+  }
+  stringstream ss;
+  int number;
+  ss<< coordinate;
+  ss>> number;
+  rowIndex = number - 1; //sets it to the intended column by subtracting 1 to get the proper index
 }
 
 bool Board::updateMyGrid(const string& coordinate) {
@@ -138,13 +138,18 @@ void Board::updateOpponentGrid(string coordinate, bool wasHit) {
 
 bool Board::withinBoundary(const string& coordinate) //checks if given coordinate is within the boundary of the board
 {
-  if (coordinate.length() != 2) {
-    return false;
-  } else {
-    convertCoordinateToIndexes(coordinate);    // sets row and column indexes to point to given coordinate
-    return (0 <= rowIndex && rowIndex <= 9)
-        && (0 <= columnIndex && columnIndex <= 9);
-  }
+if( coordinate.length() > 3 ){
+  return false;
+}
+else if(coordinate.length() >=2  ) {
+  convertCoordinateToIndexes(coordinate);    // sets row and column indexes to point to given coordinate
+  bool isit = (0 <= rowIndex && rowIndex < rows)
+        && (0 <= columnIndex && columnIndex < columns);
+    return isit;
+
+} else {
+  return false;
+}
 }
 
 string Board::getCoordinateInput(int index) {
@@ -156,7 +161,7 @@ string Board::getCoordinateInput(int index) {
   transform(coordinateInput.begin(),
             coordinateInput.end(),
             coordinateInput.begin(),
-            ::toupper);    //converts guess to uppercase
+            ::toupper);    //converts coordinate to uppercase
   return coordinateInput;
 }
 
@@ -182,6 +187,7 @@ void Board::setupBoard() {
     {
       do {
         coordinate = getCoordinateInput(index);
+//        TODO: fix bug: when length is 1 I don't check for any collisions??
         if (!withinBoundary(coordinate)) { //checks boundary and sets the indexes according to the given oordinate
           std::cout << "\n\033[1;31mInvalid coordinate! Try again.\033[0m\n";
         }
@@ -289,9 +295,9 @@ void Board::printShips() {
 bool Board::noHorizontalCollision(std::string userGuess, int shipLength) {
   convertCoordinateToIndexes(std::move(userGuess));    //updates rowIndex and columnIndex based on userGuess
   for (int i = 0; i < shipLength; i++) {
-    if ((0 <= rowIndex && rowIndex <= 9) && (0 <= columnIndex + i
+    if ((0 <= rowIndex && rowIndex <= rows) && (0 <= columnIndex + i
         && columnIndex + i
-            <= 9)) { //checks that all the next right indices are within the bounds
+            <= columns)) { //checks that all the next right indices are within the bounds
       if (myGrid[rowIndex][columnIndex + i]
           != blueTilde) {   //returns false if at any time the next right indices are not blueTildes
         return false;
@@ -306,9 +312,9 @@ bool Board::noHorizontalCollision(std::string userGuess, int shipLength) {
 bool Board::noVerticalCollision(std::string userGuess, int shipLength) {
   convertCoordinateToIndexes(std::move(userGuess));    //updates rowIndex and columnIndex based on userGuess
   for (int i = 0; i < shipLength; i++) {
-    if ((0 <= rowIndex + i && rowIndex + i <= 9) && (0 <= columnIndex
+    if ((0 <= rowIndex + i && rowIndex + i <= rows) && (0 <= columnIndex
         && columnIndex
-            <= 9)) {   //checks that all the next below indices are within bounds
+            <= columns)) {   //checks that all the next below indices are within bounds
       if (myGrid[rowIndex + i][columnIndex]
           != blueTilde) {   //returns false if at any time the next below indices are not blueTildes
         return false;

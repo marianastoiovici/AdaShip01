@@ -2,6 +2,7 @@
 #define BOARD_H
 
 #include <iostream>
+#include <vector>
 #include <map>
 using namespace std;
 
@@ -22,15 +23,17 @@ class Board {
   string myGrid[MAX_ROWS][MAX_COLUMNS]; // check https://stackoverflow.com/questions/3749660/how-to-resize-array-in-c
   string opponentGrid[MAX_ROWS][MAX_COLUMNS];
   //TODO: improve printing chars for columns when >10
-  string columnNames = "ABCDEFGHIJ";
+//  string columnNames = "ABCDEFGHIJ";
+  vector<string> columnNames = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
   int rowIndex{};
   int columnIndex{};
 
   // types of tiles	TODO: improve with an enum to store these types
-  string blueTilde; // Empty tile
-  string redHit; // Hit tile
-  string whiteMiss; // Missed tile
-  string ship; // Ship tile
+  string blueTilde = "\033[1;36m~\033[0m";    //sets the color of ~ to blue
+  string redHit = "\033[1;31mX\033[0m";    //sets the color of X to red
+ string whiteMiss = "\033[1;37mO\033[0m";        //sets the color of O to white
+//  TODO: differentiate ships on board?
+  string ship = "\033[1;32m∆\033[0m";    //sets the color of ship (∆) to green
 
   Ship* myShips = nullptr;
 
