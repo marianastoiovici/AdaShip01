@@ -5,25 +5,33 @@ using namespace std;
 
 #include "Config.h"
 
-
 //read the config file (adaship_config.ini) and returns whether this was completed successfully or not
 bool Config::readConfigFile() {
+
+  // variables to check if board and ships information have been read and saved
+  bool boardRead = false;
+  bool shipsRead = false;
+
+  readDataFromFile(boardRead, shipsRead);
+
+  return (shipsRead && boardRead);
+}
+
+void Config::readDataFromFile(bool& boardRead,
+                              bool& shipsRead) {
   ifstream configFile;
   string configLine;
 
-  // variables to check if board and boats information have been read and saved
-  bool boardRead = false;
-  bool boatsRead = false;
-
-  configFile.open("adaship_config.ini");
+  configFile.open(FILE_NAME);
 
   // read the file line by line
-  while(!configFile.eof()) { // while not at the end of the file
-    getline(configFile, configLine); //read line from file and store it in configLine variable
+  while (!configFile.eof()) { // while not at the end of the file
+    getline(configFile,
+            configLine); //read line from file and store it in configLine variable
     // variable to store the type of asset that's being read
     string type;
     int index = 0;
-    //read the configLine until the ':' to get whether is config for the board or boat
+    //read the configLine until the ':' to get whether is config for the board or ship
     while (index < configLine.length() && configLine[index] != ':') {
       //update type variable
       type += tolower(configLine[index]);
@@ -33,25 +41,23 @@ bool Config::readConfigFile() {
     index += 1;
     // if is a board asset update it with the rest of the configLine
 
-    if (type == "board") {
+    if (type == BOARD) {
       if (readBoard(configLine, index)) {
         boardRead = true;
       }
-      // if is a boat update boats
-    } else if (type == "boat") {
-      if (readBoats(configLine, index)) {
-        boatsRead = true;
+      // if is a ship update ships
+    } else if (type == BOAT) {
+      if (readShips(configLine, index)) {
+        shipsRead = true;
       }
     }
 
   }
-
   // close the file
   configFile.close();
-	return (boatsRead && boardRead);
 }
 
- // Sets the board configuration according to the config file and returns whether this completed successfully or not
+// Sets the board configuration according to the config file and returns whether this completed successfully or not
 bool Config::readBoard(string configLine, int index) {
   string tempRows;
   string tempColumns;
@@ -63,7 +69,7 @@ bool Config::readBoard(string configLine, int index) {
       return false;
     }
   }
- // get numeric characters and store them in the 'tempRows' string
+  // get numeric characters and store them in the 'tempRows' string
   while (index < configLine.length() && isdigit(configLine[index])) {
     tempRows += configLine[index];
     index++;
@@ -90,7 +96,8 @@ bool Config::readBoard(string configLine, int index) {
   this->columns = stoi(tempColumns); // convert string to int for tempColumns
 
   bool isBoardSizeValid = true;
-  if ((this->rows<5 || this->rows>80) || (this->columns<5 || this->columns>80)) {
+  if ((this->rows < 5 || this->rows > 80)
+      || (this->columns < 5 || this->columns > 80)) {
     isBoardSizeValid = false;
   }
 //  cout << "Board : " << this->tempRows << " x " << this->tempColumns << "\n";
@@ -98,19 +105,17 @@ bool Config::readBoard(string configLine, int index) {
   return isBoardSizeValid;
 }
 
-// reads the length of the boat from the config file
-bool Config::readBoats(string configLine, int index) {
-  // variable to store a temporary instance of type boat
-//  Ship::boat tempBoat;
+// reads the length of the ship from the config file
+bool Config::readShips(string configLine, int index) {
   //skip the white spaces after ':'
   if (configLine[index] == ' ') {
     index++;
   }
-  // get the name of the boat by reading up until ','
+  // get the shipName of the boat by reading up until ','
 
-  string name;
+  string shipName;
   while (index < configLine.length() && configLine[index] != ',') {
-    name += configLine[index];
+    shipName += configLine[index];
     index++;
     if (index == configLine.length()) {
       return false;
@@ -118,7 +123,7 @@ bool Config::readBoats(string configLine, int index) {
 
   }
 
-  // cout << "name: " << name << "\n";
+  // cout << "shipName: " << shipName << "\n";
 
   // skip over  ',' or white spaces
   while (index < configLine.length() && !isdigit(configLine[index])) {
@@ -127,28 +132,14 @@ bool Config::readBoats(string configLine, int index) {
       return false;
     }
   }
-  // get the length of the boat from here
-  string length;
+  // get the length of the ship from here
+  string shipLength;
   while (index < configLine.length() && isdigit(configLine[index])) {
-    length += configLine[index];
+    shipLength += configLine[index];
     index++;
   }
-  // cout << "Boat's length is:  " << length  << "\n";
-//  cout << "Boat : " << name << ", " << length << "\n";
 
-//  tempBoat.name = name;
-//  tempBoat.length = stoi(length);
-//  // add boat to our list of boats that needs to be placed on the board
-//  this->boatsToPlace.push_back(tempBoat);
+  ships[shipName] = stoi(shipLength);
 
-//   for (int i =0; i < this->boatsToPlace.size(); i++ ){
-//     cout<< "we are here and name of boat is : " << this->boatsToPlace[i].name << " and length of boat is : " << this->boatsToPlace[i].length << "\n";
-//   }
-
-boatsToPlace[name] = stoi(length);
-map<string,int>::iterator it;
-//for(it=boatsToPlace.begin(); it!=boatsToPlace.end();++it){
-//  cout<<it->first<< " => " <<it->second << '\n';
-//}
   return true;
 }

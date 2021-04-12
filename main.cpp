@@ -7,9 +7,9 @@ int main() {
   // Instantiate a Config object
   Config config;
   //  Read the file and store boolean result
-  bool configComplete = config.readConfigFile();
+  bool isConfigRead = config.readConfigFile();
   //   If configuration is not completed successfully inform user and stop program
-  if (!configComplete) {
+  if (!isConfigRead) {
     cout << "Configuration did not complete successfully.\n";
     return 0;
   }

@@ -1,7 +1,9 @@
 #include "Helpers.h"
 using namespace std;
 
-vector<string> Helpers::columnNames = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+vector<string>Helpers::columnNames =
+    {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
+     "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 int Helpers::getRandomInt(int min, int max) {
   random_device rd;
   mt19937 mt(rd());
@@ -10,15 +12,15 @@ int Helpers::getRandomInt(int min, int max) {
 }
 string Helpers::getRandomDirection() {
   string randomDirection;
-  int randomInt= Helpers::getRandomInt(1, 2);
-  if (randomInt == 1){
-    return randomDirection= "H";
+  int randomInt = Helpers::getRandomInt(1, 2);
+  if (randomInt == 1) {
+    return randomDirection = "H";
   } else {
-    return randomDirection= "V";
+    return randomDirection = "V";
   }
 }
 
-string Helpers::getDirectionInput( string shipName) {
+string Helpers::getDirectionInput(string shipName) {
   string directionInput;
   cout << "HORIZONTAL(H/h) OR VERTICAL(V/v) orientation for "
        << shipName << " :";
@@ -39,22 +41,22 @@ string Helpers::getCoordinateInput(string shipName) {
   return coordinateInput;
 }
 
-string Helpers:: getRandomCoordinate(int rows, int columns) {
+string Helpers::getRandomCoordinate(int rows, int columns) {
   string randomCoordinate;
-  int randomRow= Helpers::getRandomInt(0, rows - 1);
+  int randomRow = Helpers::getRandomInt(0, rows - 1);
   int randomColumn = Helpers::getRandomInt(0, columns - 1);
   randomCoordinate = columnNames[randomColumn] + to_string(randomRow);
   return randomCoordinate;
 }
 
-string Helpers::getTargetInput(){
+string Helpers::getTargetInput() {
   string target;
   cout << "Where would you like to shoot: ";
   getline(cin, target);
   transform(target.begin(), target.end(), target.begin(), ::toupper);
   return target;
 }
-string Helpers::charToString(char character){
+string Helpers::charToString(char character) {
   stringstream ss;
   string myString;
   ss << character;

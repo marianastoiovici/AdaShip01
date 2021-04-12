@@ -30,6 +30,8 @@ Once all points of a boat are hit, the boat is recorded to be sunk. The game end
     - [x] Fix board to display ships differently
     - [x] Fix board to display columns up to 25 (entire alphabet)
     - [] Fix board to display columns up to 80
+    - [] Fix boat placement for coordinate 6H instead of H6
+    - [] Press Enter to let other player take its turn -> Press Enter to let "player 1/2" take its turn
     
     
     
