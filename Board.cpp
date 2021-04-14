@@ -370,12 +370,4 @@ int Board::getNumberOfShips() const {
 Ship* Board::getShips() const {
   return myShips;
 }
-int Board::getRows() const{
-  return rows;
-}
-  int Board::getColumns() const {
-  return columns;
-}
-  map<string,int> Board::getBoats() const{
-  return ships;
-}
+

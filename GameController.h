@@ -55,8 +55,8 @@ class GameController {
   void shoot(const string& coordinate);
   void play(bool ai, map<string, int> map1);
   void checkGameOver(Player* player);
-  int pause(int turn);
-//  void setPlayer1_Turn(int value);
+  void pause(int turn);
+
 
 
   string columnToString(int column);

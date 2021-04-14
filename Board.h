@@ -30,15 +30,12 @@ class Board {
   string blueTilde = "\033[1;36m~\033[0m";    //sets the color of ~ to blue
   string redHit = "\033[1;31mX\033[0m";    //sets the color of X to red
  string whiteMiss = "\033[1;37mO\033[0m";        //sets the color of O to white
-//  TODO: differentiate ships on board?
-  string ship = "\033[1;32m∆\033[0m";    //sets the color of ship (∆) to green
 
   Ship* myShips = nullptr;
 
-  void initialiseLookup();
-  void placeALlShipsAutomatically();
 
- public:
+
+public:
   Board();
   // Board Constructor
   Board(int rows, int columns, const map<string, int>& ships);
@@ -51,6 +48,7 @@ class Board {
   void placeShipManually(int shipIndex);
   void placeAllShipsManually();
   void placeShipAutomatically(int shipIndex);
+  void placeAllShipsAutomatically();
   int getNumberOfShips() const;
   void convertCoordinateToIndexes(string coordinate);
   void updateOpponentGrid(string coordinate, bool wasHit);
@@ -60,15 +58,13 @@ class Board {
   bool noVerticalCollision(string userGuess, int shipLength);
   Ship* getShips() const;
   void printShips();
-   void placeAllShipsAutomatically();
-//  string getRandomCoordinate() const;
+
 
   void createListOfShips();
   bool isValidHorizontalDirection(const string& direction) const;
   bool isValidVerticalDirection(const string& direction) const;
-  int getRows() const;
-  int getColumns() const ;
-  map<string,int> getBoats() const;
+
+
 
 };
 #endif
