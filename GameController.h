@@ -34,16 +34,17 @@ class GameController {
 
   Player* player_1{};        //player object for player1
   Player* player_2{};        //player object for player2
-  int player_1Turn{}; //true if player1 turn, false if player2 turn
+//  static int player_1Turn; //true if player1 turn, false if player2 turn
   bool
       gameOver = false;    //game over to stop the while loop once the game ends
 
   void startGame(bool isGameWithAI);
   static void quit();
-  void getPlayerMenu(Player* player);
+  void getPlayerMenu(Player* player, int turn);
   void setupPlayer(Player* player, int turn);
 
  public:
+   int player_1Turn; //true if player1 turn, false if player2 turn
   map<string, int> alphaLookup_;
   // Constructor method for GameController.
   explicit GameController(Config config);
@@ -54,7 +55,9 @@ class GameController {
   void shoot(const string& coordinate);
   void play(bool ai, map<string, int> map1);
   void checkGameOver(Player* player);
-  static void pause();
+  int pause(int turn);
+//  void setPlayer1_Turn(int value);
+
 
   string columnToString(int column);
   void initialiseLookup();

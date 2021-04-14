@@ -27,14 +27,11 @@ void Board::initializeBoard() {
       opponentGrid[indexRows][indexColumns] = blueTilde;
     }
   }
-
-
-
   printMyGrid();
   createListOfShips();
-//  printShips();
-
 }
+
+
 
 void Board::printMyGrid() {    //prints the current player's board
   cout << "\t\t\t\033[1;32mYour board\033[0m\n";
@@ -95,7 +92,6 @@ void Board::convertCoordinateToIndexes(string coordinate) {
         break;
       }
     }
-
   } else {
     return;
   }
@@ -164,6 +160,16 @@ void Board::placeAllShipsAutomatically(){
   for (int shipIndex=0; shipIndex< numberOfShips; shipIndex++){
     placeShipAutomatically(shipIndex);
   }
+  printMyGrid();
+  printShips();
+}
+
+void Board::placeAllShipsManually(){
+  for (int shipIndex=0; shipIndex< numberOfShips; shipIndex++){
+    placeShipManually(shipIndex);
+  }
+  printMyGrid();
+  printShips();
 }
 void Board::placeShipAutomatically(int index) {
 
@@ -186,8 +192,8 @@ void Board::placeShipAutomatically(int index) {
               temp[0] = temp.at(0) + 1; // moves to next one
             }
             myShips[index].setPlaced(true);
-            printMyGrid();    //prints the updated board
-            printShips();
+//            printMyGrid();    //prints the updated board
+//            printShips();
             isValidCoordinate = true;
             isValidDirection = true;
           } else {
@@ -209,8 +215,8 @@ void Board::placeShipAutomatically(int index) {
               temp[1] = temp.at(1) + 1;
             }
             myShips[index].setPlaced(true);
-            printMyGrid();
-            printShips();
+//            printMyGrid();
+//            printShips();
             isValidCoordinate = true;
             isValidDirection = true;    //true to exit the while loop
           } else {
@@ -225,69 +231,74 @@ void Board::placeShipAutomatically(int index) {
 }
 
 
-void Board::placeShipManually() {
-  int shipIndex = stoi(Helpers::getInput("Please specify ID for ship you want to place: "));
-  string coordinate;
+void Board::placeShipManually(int shipIndex) {
+//  int shipIndex = stoi(Helpers::getInput("Please specify ID for ship you want to place: "));
+  if (!myShips[shipIndex].getPlaced()) {
+    cout<< "\nPlace your " << myShips[shipIndex].getName()<<", "<< myShips[shipIndex].getLength();
+    string coordinate;
 //TODO: do not ask for direction when ship length is 1
-  //("H" or "h" or "V" or "v") horizontal or vertical ship placement
-  string direction = Helpers::getDirectionInput();
-  bool isValidDirection = false;
-  bool isValidCoordinate = false;
-  do {
-    if (isValidHorizontalDirection(direction)) {
-      coordinate = Helpers::getCoordinateInput();
-      while (!isValidCoordinate) {  //runs until the location is valid
-        if (noHorizontalCollision(coordinate,
+    //("H" or "h" or "V" or "v") horizontal or vertical ship placement
+    string direction = Helpers::getDirectionInput();
+    bool isValidDirection = false;
+    bool isValidCoordinate = false;
+    do {
+      if (isValidHorizontalDirection(direction)) {
+        coordinate = Helpers::getCoordinateInput();
+        while (!isValidCoordinate) {  //runs until the location is valid
+          if (noHorizontalCollision(coordinate,
+                                    myShips[shipIndex].getLength())) {
+            string temp =
+                coordinate;    //used to store and manipulate userGuess without changing userGuess
+            for (int j = 0; j < myShips[shipIndex].getLength(); j++) {
+              myGrid[rowIndex][columnIndex + j] =
+                  myShips[shipIndex].getSign();   //set tile to ship
+              myShips[shipIndex].addCoordinate(temp,
+                                               j); // add tempCoordinate to the ships coordinates
+              temp[0] = temp.at(0) + 1; // moves to next one
+            }
+            myShips[shipIndex].setPlaced(true);
+            printMyGrid();    //prints the updated board
+            printShips();
+            isValidCoordinate =
+                true;    //sets valid location to true to help break out of loop
+            isValidDirection = true;    //true to kick out of while loop
+          } else {
+            cout << "\n\033[1;31mInvalid location. Try again!\033[0m\n";
+            coordinate = Helpers::getCoordinateInput();
+          }
+        }
+
+      } else if (isValidVerticalDirection(direction)) {
+        coordinate = Helpers::getCoordinateInput();
+
+        while (!isValidCoordinate) {
+          if (noVerticalCollision(coordinate,
                                   myShips[shipIndex].getLength())) {
-          string temp =
-              coordinate;    //used to store and manipulate userGuess without changing userGuess
-          for (int j = 0; j < myShips[shipIndex].getLength(); j++) {
-            myGrid[rowIndex][columnIndex + j] =
-                myShips[shipIndex].getSign();   //set tile to ship
-            myShips[shipIndex].addCoordinate(temp,
-                                         j); // add tempCoordinate to the ships coordinates
-            temp[0] = temp.at(0) + 1; // moves to next one
+            string temp =
+                coordinate;    //used to store and manipulate tempCoordinate without changing it
+            for (int j = 0; j < myShips[shipIndex].getLength(); j++) {
+              myGrid[rowIndex + j][columnIndex] = myShips[shipIndex].getSign();
+              myShips[shipIndex].addCoordinate(temp, j);
+              temp[1] = temp.at(1) + 1;
+            }
+            myShips[shipIndex].setPlaced(true);
+            printMyGrid();
+            printShips();
+            isValidCoordinate = true;
+            isValidDirection = true;    //true to exit the while loop
+          } else {
+            cout << "\n\033[1;31mInvalid location. Try again!\033[0m\n";
+            coordinate = Helpers::getCoordinateInput();
           }
-          myShips[shipIndex].setPlaced(true);
-          printMyGrid();    //prints the updated board
-          printShips();
-          isValidCoordinate =
-              true;    //sets valid location to true to help break out of loop
-          isValidDirection = true;    //true to kick out of while loop
-        } else {
-          cout << "\n\033[1;31mInvalid location. Try again!\033[0m\n";
-          coordinate = Helpers::getCoordinateInput();
         }
+      } else {  //if the input was not "V" or "v"
+        cout << "\n\033[1;31mInvalid Direction. Try again!\033[0m\n";
+        direction = Helpers::getDirectionInput();
       }
-
-    } else if (isValidVerticalDirection(direction)) {
-      coordinate = Helpers::getCoordinateInput();
-
-      while (!isValidCoordinate) {
-        if (noVerticalCollision(coordinate,
-                                myShips[shipIndex].getLength())) {
-          string temp =
-              coordinate;    //used to store and manipulate tempCoordinate without changing it
-          for (int j = 0; j < myShips[shipIndex].getLength(); j++) {
-            myGrid[rowIndex + j][columnIndex] = myShips[shipIndex].getSign();
-            myShips[shipIndex].addCoordinate(temp, j);
-            temp[1] = temp.at(1) + 1;
-          }
-          myShips[shipIndex].setPlaced(true);
-          printMyGrid();
-          printShips();
-          isValidCoordinate = true;
-          isValidDirection = true;    //true to exit the while loop
-        } else {
-          cout << "\n\033[1;31mInvalid location. Try again!\033[0m\n";
-          coordinate = Helpers::getCoordinateInput();
-        }
-      }
-    } else {  //if the input was not "V" or "v"
-      cout << "\n\033[1;31mInvalid Direction. Try again!\033[0m\n";
-      direction = Helpers::getDirectionInput();
-    }
-  } while (!isValidDirection);    //runs until the user has inputed "H" or "h" or "V" or "v".
+    } while (!isValidDirection);    //runs until the user has inputed "H" or "h" or "V" or "v".
+  } else {
+    cout<< "Ship is already placed!"<<"\n";
+  }
 }
 
 bool Board::isValidVerticalDirection(const string& direction) const {
@@ -310,14 +321,10 @@ void Board::createListOfShips() {
 }
 
 void Board::printShips() {
+  cout <<"ID"<< setw(2) <<"- " << "STATUS"<< setw(2) <<"- "  "SHIP"<< "\n";
   for (int i = 0; i < numberOfShips; i++) {
-    if (myShips[i].getPlaced()) {
-      cout << myShips[i].getName() << " of length " << myShips[i].getLength()
-           << " is PLACED.\n";
-    } else {
-      cout << myShips[i].getName() << " of length " << myShips[i].getLength()
-           << " is NOT PLACED.\n";
-    }
+      cout << i << setw(4) << "-  " << myShips[i].isPlaced() <<setw(4) << "-  "<< myShips[i].getName() << "," << myShips[i].getLength()
+           << "\n";
   }
   cout << "\n\n";
 }
@@ -362,4 +369,13 @@ int Board::getNumberOfShips() const {
 
 Ship* Board::getShips() const {
   return myShips;
+}
+int Board::getRows() const{
+  return rows;
+}
+  int Board::getColumns() const {
+  return columns;
+}
+  map<string,int> Board::getBoats() const{
+  return ships;
 }

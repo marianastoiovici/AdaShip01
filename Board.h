@@ -48,7 +48,8 @@ class Board {
   void printOpponentGrid();
   void printMyGrid();
   void initializeBoard();
-  void placeShipManually();
+  void placeShipManually(int shipIndex);
+  void placeAllShipsManually();
   void placeShipAutomatically(int shipIndex);
   int getNumberOfShips() const;
   void convertCoordinateToIndexes(string coordinate);
@@ -65,6 +66,10 @@ class Board {
   void createListOfShips();
   bool isValidHorizontalDirection(const string& direction) const;
   bool isValidVerticalDirection(const string& direction) const;
+  int getRows() const;
+  int getColumns() const ;
+  map<string,int> getBoats() const;
+
 };
 #endif
 

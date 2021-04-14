@@ -29,6 +29,7 @@ GameController::GameController(Config config) { // TODO review instance variable
   rows = config.getRows();
   columns = config.getColumns();
   configBoats = config.getShipsToPlace();
+//  player_1Turn = 1;
 }
 
 GameController::~GameController() {
@@ -61,25 +62,27 @@ GameController::~GameController() {
 }
 
 
-void GameController::getPlayerMenu(Player* player) {
-  while (true) {
+void GameController::getPlayerMenu(Player* player, int playerTurn) {
+  while (player_1Turn) {
     // display the options and get user's input
     string userInput;
     cout << "\nWhat would you like to do: \n";
     cout << "\t1 - Place available ships automatically\n";
     cout << "\t2 - Place ships manually\n";
-    cout << "\t3 - Reset your board\n";
-    cout << "\t4 - Give turn to other player\n";
+    cout << "\t3 - Give turn to other player\n";
+    cout << "\t4 - Reset your board\n";
     cout << "\tq - Quit\n";
     getline(cin, userInput);
     switch (resolvePlayerOption(userInput)) {
       case Player_Option1:player->getBoard()->placeAllShipsAutomatically();
         break;
-      case Player_Option2:player->getBoard()->placeShipManually();
+      case Player_Option2:player->getBoard()->placeAllShipsManually();
         break;
-//      case Player_Reset:player->getBoard().resetBoard();
-//        break;
-      case Player_Option3:pause(); // TODO:: this should switcgh turns too
+        case Player_Option3:pause(playerTurn); // TODO:: this should switcgh turns too
+        break;
+      case Player_Reset:
+        player->getBoard()->initializeBoard();
+        player->getBoard()->printShips();
         break;
       case Player_Quit:quit();
         break;
@@ -119,14 +122,9 @@ string GameController::columnToString(int column) {
        cout << "\n\033[1;32m Player 2 place your ships\033[0m\n";
     }
     player->getBoard()->initializeBoard();
+    player->getBoard()->printShips();
 
-    cout <<"ID"<< setw(2) <<"- " << "STATUS"<< setw(2) <<"- "  "SHIP"<< "\n";
-    for (int shipIndex = 0; shipIndex < player->getBoard()->getNumberOfShips();
-       shipIndex++) {
-    Ship ship = player->getBoard()->getShips()[shipIndex];
-    cout<< shipIndex << setw(4) << "-  " << ship.isPlaced() <<setw(4) << "-  "<<  ship.getName() << ", " << ship.getLength()<<"\n";// ship.toString
-  }
-    getPlayerMenu(player);
+    getPlayerMenu(player, turn);
   }
 
 
@@ -134,37 +132,45 @@ string GameController::columnToString(int column) {
 // Start a game
 void GameController::startGame(bool isGameWithAI) {
     initialiseLookup();
-  player_1Turn = 1;
+    player_1Turn = 1;
+//   setPlayer1_Turn(1);
   cout << "\n\t Setting up the game! " << "\n";
 
   player_1 = new Player(rows, columns, configBoats);
   setupPlayer(player_1, player_1Turn);
-//  cout << "\n\033[1;32m Player 1 place your ships\033[0m\n";
-//  player_1->getBoard()->initializeBoard();
-//  for (int shipIndex = 0; shipIndex < player_1->getBoard()->getNumberOfShips();
-//       shipIndex++) {
-//    player_1->getBoard()->placeShipManually(shipIndex);
-//  }
-  pause();
 
   player_2 = new Player(rows, columns, configBoats);
-  cout << "\n\033[1;32m Player 2 place your ships \033[0m\n";
-  player_2->getBoard()->initializeBoard();
   if (isGameWithAI) {
-    for (int shipIndex = 0;
-         shipIndex < player_1->getBoard()->getNumberOfShips(); shipIndex++) {
-      player_2->getBoard()->placeShipAutomatically(shipIndex);
+    cout << "\n\033[1;32m Player 2 place your ships \033[0m\n";
+    player_2->getBoard()->initializeBoard();
+
+      player_2->getBoard()->placeAllShipsAutomatically();
+
+
+    pause(0);
+  }else {
+      setupPlayer(player_2, player_1Turn);
     }
-    pause();
-    play(isGameWithAI, alphaLookup_);
-  } else {
-    for (int shipIndex = 0;
-         shipIndex < player_1->getBoard()->getNumberOfShips(); shipIndex++) {
-//      player_2->getBoard()->placeShipManually(shipIndex);
-    }
-    pause();
-    play(isGameWithAI, alphaLookup_);
-  }
+  play(isGameWithAI, alphaLookup_);
+
+//  player_2 = new Player(rows, columns, configBoats);
+//  cout << "\n\033[1;32m Player 2 place your ships \033[0m\n";
+//  player_2->getBoard()->initializeBoard();
+//  if (isGameWithAI) {
+//    for (int shipIndex = 0;
+//         shipIndex < player_1->getBoard()->getNumberOfShips(); shipIndex++) {
+//      player_2->getBoard()->placeShipAutomatically(shipIndex);
+//    }
+////    pause();
+//    play(isGameWithAI, alphaLookup_);
+//  } else {
+//    for (int shipIndex = 0;
+//         shipIndex < player_1->getBoard()->getNumberOfShips(); shipIndex++) {
+////      player_2->getBoard()->placeShipManually(shipIndex);
+//    }
+////    pause();
+//    play(isGameWithAI, alphaLookup_);
+//  }
 }
 
 // Quit the game
@@ -225,7 +231,7 @@ void GameController::play(bool ai, map<string, int> alphaLookup_) {
         cout << "PLAYER 1 TURN\n";
         player_1->getBoard()->printMyGrid();
         player_1->getBoard()->printOpponentGrid();
-        pause();
+//        pause();
       } else if (player_1Turn % 2 == 0
           && !gameOver)    //if it is player 2's turn
       {
@@ -233,7 +239,7 @@ void GameController::play(bool ai, map<string, int> alphaLookup_) {
 
         player_2->getBoard()->printMyGrid();
         player_2->getBoard()->printOpponentGrid();
-        pause();
+//        pause();
       }
 
       player_1Turn++; //switch turns
@@ -285,8 +291,17 @@ void GameController::checkGameOver(Player* player) {
   }
 }
 
-void GameController::pause() {
+int GameController::pause(int turn) {
   cout << "Press Enter to let other player take its turn: ";
   cin.ignore(numeric_limits<streamsize>::max(),
              '\n');
+  if(turn == 1){
+    return player_1Turn = 0;
+  } else {
+    return player_1Turn = 1;
+  }
 }
+
+//void GameController:: setPlayer1_Turn(int value){
+//    player_1Turn = value;
+//  }

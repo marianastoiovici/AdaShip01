@@ -13,4 +13,5 @@ class Player {
   void shootCoordinate(string coordinate, bool hit);
   bool getShot(const string& coordinate);
   Board* getBoard() const;
+//  Board* resetBoard() const;
 };

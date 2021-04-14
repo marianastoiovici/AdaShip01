@@ -23,7 +23,7 @@ string Helpers::getRandomDirection() {
 
 string Helpers::getDirectionInput() {
   string directionInput;
-  cout << "HORIZONTAL(H/h) OR VERTICAL(V/v) orientation: ";
+  cout << "\nHORIZONTAL(H/h) OR VERTICAL(V/v) orientation: ";
   getline(std::cin,
           directionInput);
   return directionInput;
