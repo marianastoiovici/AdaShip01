@@ -35,7 +35,6 @@ void Board::initializeBoard() {
     createListOfShips();
 }
 
-
 void Board::printMyGrid() {    //prints the current player's board
     cout << "\t\t\t\033[1;32mYour board\033[0m\n";
     cout << setw(5);

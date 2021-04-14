@@ -37,7 +37,6 @@ private:
 
     map<string, int> alphaLookup_;
 
-
 public:
     Board();
 

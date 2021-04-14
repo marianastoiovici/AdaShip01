@@ -5,13 +5,13 @@ using namespace std;
 
 vector<string>Helpers::columnNames =
         {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
-         "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+         "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC"};
 
 int Helpers::getRandomInt(int min, int max) {
     random_device rd;
-    mt19937 mt(rd());
+    mt19937 gen(rd());
     uniform_int_distribution<int> dist(min, max);
-    return dist(mt);
+    return dist(gen);
 }
 
 string Helpers::getRandomDirection() {
@@ -32,18 +32,6 @@ string Helpers::getDirectionInput() {
     return directionInput;
 }
 
-string Helpers::getCoordinateInput() {
-/*  string coordinateInput;
-//  cout << "Enter coordinate of type \'A1\', \'E5\' to place your ship.\n";
-
-  getline(std::cin, coordinateInput);
-  transform(coordinateInput.begin(),
-            coordinateInput.end(),
-            coordinateInput.begin(),
-            ::toupper);    //converts coordinate to uppercase
-  return coordinateInput;*/
-}
-
 string Helpers::getRandomCoordinate(int rows, int columns) {
     string randomCoordinate;
     int randomRow = Helpers::getRandomInt(0, rows - 1);
@@ -59,16 +47,10 @@ string Helpers::getInput(string question) {
     return input;
 }
 
-//string Helpers::printText(string text){
-//  cout<<
-//}
-
 string Helpers::getCoordinate(string coordinate, map<string, int> map, int rows) {
-
-
     int index = 0;
     // get the alphabetic part of the string
-    string alphabetic = "";
+    string alphabetic;
     while (index < coordinate.length() && isalpha(coordinate[index])) {
         alphabetic += toupper(coordinate[index]);
         index++;
@@ -79,11 +61,8 @@ string Helpers::getCoordinate(string coordinate, map<string, int> map, int rows)
         return INVALID_COORDINATE;
     }
 
-    // otherwise, look up the column number it represents
-    int column = map[alphabetic];
-
     // get the number part
-    string numeric = "";
+    string numeric;
     while (index < coordinate.length() && isdigit(coordinate[index])) {
         numeric += coordinate[index];
         index++;
