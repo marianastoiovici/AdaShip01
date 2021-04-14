@@ -6,12 +6,22 @@ using namespace std;
 #include "Config.h"
 #include "Player.h"
 
-enum Options {
+enum GameOptions {
     Menu_Invalid,
     Menu_Option1,
     Menu_Option2,
     Menu_Quit
 };
+
+enum PlayerOptions {
+    Player_OptionInvalid,
+    Player_Option1,
+    Player_Option2,
+    Player_Option3,
+    Player_Reset,
+    Player_Quit,
+};
+
 
 //Creates and sets up the game, controlling the program.
 class GameController {
@@ -19,7 +29,8 @@ class GameController {
   int rows;
   int columns;
   map<string, int> configBoats;
-  Options resolveOption(string input);
+  GameOptions resolveOption(string input);
+  PlayerOptions resolvePlayerOption(string input);
 
   Player* player_1{};        //player object for player1
   Player* player_2{};        //player object for player2
@@ -29,8 +40,11 @@ class GameController {
 
   void startGame(bool isGameWithAI);
   static void quit();
+  void getPlayerMenu(Player* player);
+  void setupPlayer(Player* player, int turn);
 
  public:
+  map<string, int> alphaLookup_;
   // Constructor method for GameController.
   explicit GameController(Config config);
 
@@ -38,8 +52,10 @@ class GameController {
 
   [[noreturn]] void menu();
   void shoot(const string& coordinate);
-  void play(bool ai);
+  void play(bool ai, map<string, int> map1);
   void checkGameOver(Player* player);
   static void pause();
 
+  string columnToString(int column);
+  void initialiseLookup();
 };

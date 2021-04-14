@@ -2,8 +2,10 @@
 #include <random>
 #include "algorithm" //for transform
 #include <sstream>
+#include "map"
 using namespace std;
 
+static const char* const INVALID_COORDINATE = "target invalid";
 class Helpers {
  public:
   //TODO: improve columnNames to contain generated names based on the nr of columns.
@@ -11,9 +13,10 @@ class Helpers {
   static vector<string> columnNames ;
   static int getRandomInt(int min, int max);
   static string getRandomDirection();
-  static string getDirectionInput(string shipName);
-  static string getCoordinateInput(string shipName);
+  static string getDirectionInput();
+  static string getCoordinateInput();
   static string getRandomCoordinate(int rows, int columns);
-  static string getTargetInput();
+  static string getTargetInput(const map<string, int> alphaLookup_, int rows);
   static string charToString(char character);
+  static string getInput(string question);
 };

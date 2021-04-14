@@ -23,6 +23,7 @@ class Ship {
   void increaseDamage();
   bool isSunk() const;
   void setPlaced(bool newPlaced);
+  string isPlaced();
   bool getPlaced() const;
   string getSign() const;
 };

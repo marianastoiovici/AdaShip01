@@ -73,3 +73,12 @@ bool Ship::getPlaced() const {
 void Ship::setPlaced(bool newPlaced) {
   placed = newPlaced;
 }
+
+string Ship::isPlaced(){
+  if(getPlaced()){
+    return "PLACED";
+  } else {
+    return "NOT PLACED";
+  }
+
+}

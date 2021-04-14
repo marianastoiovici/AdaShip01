@@ -35,6 +35,9 @@ class Board {
 
   Ship* myShips = nullptr;
 
+  void initialiseLookup();
+  void placeALlShipsAutomatically();
+
  public:
   Board();
   // Board Constructor
@@ -45,7 +48,7 @@ class Board {
   void printOpponentGrid();
   void printMyGrid();
   void initializeBoard();
-  void placeShipManually(int shipIndex);
+  void placeShipManually();
   void placeShipAutomatically(int shipIndex);
   int getNumberOfShips() const;
   void convertCoordinateToIndexes(string coordinate);
@@ -56,6 +59,7 @@ class Board {
   bool noVerticalCollision(string userGuess, int shipLength);
   Ship* getShips() const;
   void printShips();
+   void placeAllShipsAutomatically();
 //  string getRandomCoordinate() const;
 
   void createListOfShips();
