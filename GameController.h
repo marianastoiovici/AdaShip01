@@ -23,6 +23,8 @@ enum PlayerOptions {
 };
 
 
+static const char *const INVALID_MENU_OPTION = "Please enter a valid option.\n\n";
+
 //Creates and sets up the game, controlling the program.
 class GameController {
  private:
@@ -54,11 +56,13 @@ class GameController {
   [[noreturn]] void menu();
   void shoot(const string& coordinate);
   void play(bool ai, map<string, int> map1);
-  void checkGameOver(Player* player);
+  void checkGameOver();
   void pause(int turn);
 
 
 
   string columnToString(int column);
   void initialiseLookup();
+
+    bool isHumanPlayerTurn() const;
 };

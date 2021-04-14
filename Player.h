@@ -14,4 +14,5 @@ class Player {
   bool getShot(const string& coordinate);
   Board* getBoard() const;
 //  Board* resetBoard() const;
+    bool allShipsPlaced();
 };

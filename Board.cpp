@@ -7,12 +7,14 @@
 using namespace std;
 
 #include "Board.h"
+#include "GameController.h"
 
 Board::Board(int rows, int columns, const map<string, int>& ships) {
   this->rows = rows;
   this->columns = columns;
   this->ships = ships;
   this->numberOfShips = ships.size();
+  sunkedShips=0;
 }
 
 Board::~Board() {
@@ -113,11 +115,11 @@ bool Board::updateMyGrid(const string& coordinate) {
     // loops through all ships to find the ship with the hit coordinate in order to increase its damage
     for (int i = 0; i < numberOfShips; i++) {
       for (int j = 0; j < myShips[i].getLength(); j++) {
-//        cout << myShips[i].getCoordinate(j) << "\n";
         if (myShips[i].getCoordinate(j) == coordinate) {
           myShips[i].increaseDamage();    //add damage counter to that ship
           if (myShips[i].isSunk()) {
             std::cout << "\033[1;32mSHIP SUNK!!!\033[0m\n";
+            sunkedShips++;
           }
           break;
         }
@@ -227,6 +229,8 @@ void Board::placeShipAutomatically(int index) {
 
     } while (!isValidDirection);    //runs until the user has inputed "H" or "h" or "V" or "v".
 
+  } else {
+      cout<< "Ship is already placed!"<<"\n";
   }
 }
 
