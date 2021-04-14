@@ -11,6 +11,7 @@ GameController::GameController(Config config) { // TODO review instance variable
     rows = config.getRows();
     columns = config.getColumns();
     configBoats = config.getShipsToPlace();
+    alphaLookup_ = initialiseLookup();
 }
 
 GameController::~GameController() {
@@ -113,14 +114,13 @@ void GameController::setupPlayer(Player *player, int turn) {
 
 // Start a game
 void GameController::startGame(bool isGameWithAI) {
-    initialiseLookup();
     player_1Turn = 1;
     cout << "\n\t Setting up the game! " << "\n";
 
-    player_1 = new Player(rows, columns, configBoats);
+    player_1 = new Player(rows, columns, configBoats, alphaLookup_);
     setupPlayer(player_1, player_1Turn);
 
-    player_2 = new Player(rows, columns, configBoats);
+    player_2 = new Player(rows, columns, configBoats, alphaLookup_);
     if (isGameWithAI) {
         cout << "\n" << "AI places ships " << "\n";
         player_2->getBoard()->initializeBoard();
@@ -152,39 +152,38 @@ void GameController::quit() {
 void GameController::play(bool ai, map<string, int> alphaLookup_) {
     while (!gameOver) {
         try {
-            string target = "";
-            while (target.length() != 2) {
-                if (isHumanPlayerTurn()) {
-                    cout << "\n\n \033[1;31mPlayer 1's turn to shoot!\033[0m" << "\n";
-                    player_1->getBoard()->printMyGrid();
-                    player_1->getBoard()->printOpponentGrid();
-                    target = Helpers::getTargetInput(alphaLookup_, rows);
-                    if (target == INVALID_COORDINATE) {
-                        cout
-                                << "Invalid coordinate! Please try again.\n"; //error if user inputs a string which length is not 2
-                    }
+            string target;
+            if (isHumanPlayerTurn()) {
+                cout << "\n\n \033[1;31mPlayer 1's turn to shoot!\033[0m" << "\n";
+                player_1->getBoard()->printMyGrid();
+                player_1->getBoard()->printOpponentGrid();
+                string coordinate = Helpers::getInput("Where would you like to shoot: ");
+                target = Helpers::getCoordinate(coordinate, alphaLookup_, rows);
+                if (target == INVALID_COORDINATE) {
+                    cout << "\n\033[1;31mInvalid coordinate! Please try again.\033[0m\n";
+                }
 
+            } else {
+                if (ai) {
+                    cout << "\n\n \033[1;31mAi's turn to shoot!\033[0m" << "\n";
+                    player_2->getBoard()->printMyGrid();
+                    player_2->getBoard()->printOpponentGrid();
+
+                    target = Helpers::getRandomCoordinate(rows, columns);
                 } else {
-                    if (ai) {
-                        cout << "\n\n \033[1;31mAi's turn to shoot!\033[0m" << "\n";
-                        player_2->getBoard()->printMyGrid();
-                        player_2->getBoard()->printOpponentGrid();
-
-                        target = Helpers::getRandomCoordinate(rows, columns);
-                    } else {
-                        cout << "\n\n \033[1;31mPlayer 2's turn to shoot!\033[0m" << "\n";
-                        player_2->getBoard()->printMyGrid();
-                        player_2->getBoard()->printOpponentGrid();
+                    cout << "\n\n \033[1;31mPlayer 2's turn to shoot!\033[0m" << "\n";
+                    player_2->getBoard()->printMyGrid();
+                    player_2->getBoard()->printOpponentGrid();
 //            cout << "\n\033[1;31mPlayer 2: \033[0m";
-                        target = Helpers::getTargetInput(alphaLookup_, rows);
-                    }
+                    string coordinate = Helpers::getInput("Where would you like to shoot: ");
+                    target = Helpers::getCoordinate(coordinate, alphaLookup_, rows);
+                }
 // TODO: need to check if target is valid based oon how many columns I have , might be H14, so length is 3
-                    if (target.length() != 2) {
-                        cout
-                                << "Invalid coordinate! Try again.\n";//error if user inputs a string which length is not 2
-                    }
+                if (target.length() != 2) {
+                    cout << "\n\033[1;31mInvalid coordinate! Please try again.\033[0m\n";
                 }
             }
+
             shoot(target);
             if (!gameOver) {
                 if (isHumanPlayerTurn()) {
@@ -278,11 +277,16 @@ string GameController::columnToString(int column) {
 }
 
 /** Populates the mapping from Excel-style column names to column numbers. */
-void GameController::initialiseLookup() {
+map<string, int> GameController::initialiseLookup() {
     // populate an 'alpha to column number' lookup map
+
+    map<string, int> alphaLookup_;
+
     for (int i = 1; i <= columns; i++) {
         alphaLookup_[columnToString(i)] = i;
     }
+
+    return alphaLookup_;
 }
 
 GameOptions GameController::resolveOption(std::string input) {

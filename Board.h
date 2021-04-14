@@ -35,12 +35,14 @@ private:
 
     Ship *myShips = nullptr;
 
+    map<string, int> alphaLookup_;
+
 
 public:
     Board();
 
     // Board Constructor
-    Board(int rows, int columns, const map<string, int> &ships);
+    Board(int rows, int columns, const map<string, int> &ships, map<string, int> alphaLookup_);
 
     ~Board();
 

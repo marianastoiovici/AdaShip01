@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <map>
+
 using namespace std;
 
 #include "Config.h"
@@ -27,42 +28,51 @@ static const char *const INVALID_MENU_OPTION = "Please enter a valid option.\n\n
 
 //Creates and sets up the game, controlling the program.
 class GameController {
- private:
-  int rows;
-  int columns;
-  map<string, int> configBoats;
-  GameOptions resolveOption(string input);
-  PlayerOptions resolvePlayerOption(string input);
+private:
+    int rows;
+    int columns;
+    map<string, int> configBoats;
 
-  Player* player_1{};        //player object for player1
-  Player* player_2{};        //player object for player2
+    GameOptions resolveOption(string input);
+
+    PlayerOptions resolvePlayerOption(string input);
+
+    Player *player_1{};        //player object for player1
+    Player *player_2{};        //player object for player2
 //  static int player_1Turn; //true if player1 turn, false if player2 turn
-  bool
-      gameOver = false;    //game over to stop the while loop once the game ends
+    bool
+            gameOver = false;    //game over to stop the while loop once the game ends
 
-  void startGame(bool isGameWithAI);
-  static void quit();
-  void getPlayerMenu(Player* player, int turn);
-  void setupPlayer(Player* player, int turn);
+    void startGame(bool isGameWithAI);
 
- public:
-   int player_1Turn; //true if player1 turn, false if player2 turn
-  map<string, int> alphaLookup_;
-  // Constructor method for GameController.
-  explicit GameController(Config config);
+    static void quit();
 
-  ~GameController();
+    void getPlayerMenu(Player *player, int turn);
 
-  [[noreturn]] void menu();
-  void shoot(const string& coordinate);
-  void play(bool ai, map<string, int> map1);
-  void checkGameOver();
-  void pause(int turn);
+    void setupPlayer(Player *player, int turn);
+
+    map<string, int> alphaLookup_;
+public:
+    int player_1Turn; //true if player1 turn, false if player2 turn
+    // Constructor method for GameController.
+    explicit GameController(Config config);
+
+    ~GameController();
+
+    [[noreturn]] void menu();
+
+    void shoot(const string &coordinate);
+
+    void play(bool ai, map<string, int> map1);
+
+    void checkGameOver();
+
+    void pause(int turn);
 
 
+    string columnToString(int column);
 
-  string columnToString(int column);
-  void initialiseLookup();
+    map<string, int> initialiseLookup();
 
     bool isHumanPlayerTurn() const;
 };

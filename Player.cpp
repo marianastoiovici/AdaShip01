@@ -2,8 +2,8 @@
 
 #include <utility>
 
-Player::Player(int rows, int columns, const map<string, int> &boats) {
-    board = new Board(rows, columns, boats);
+Player::Player(int rows, int columns, const map<string, int> &boats, map<string, int> alphaLookup_) {
+    board = new Board(rows, columns, boats, alphaLookup_);
 }
 
 Player::~Player() {
