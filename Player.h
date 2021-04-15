@@ -1,3 +1,6 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
 #include <iostream>
 #include <map>
 
@@ -18,6 +21,7 @@ public:
 
     Board *getBoard() const;
 
-//  Board* resetBoard() const;
     bool allShipsPlaced();
 };
+
+#endif

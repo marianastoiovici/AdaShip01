@@ -22,7 +22,7 @@ private:
     int numberOfShips;
 
 
-    string myGrid[MAX_ROWS][MAX_COLUMNS]; // check https://stackoverflow.com/questions/3749660/how-to-resize-array-in-c
+    string myGrid[MAX_ROWS][MAX_COLUMNS];
     string opponentGrid[MAX_ROWS][MAX_COLUMNS];
 
     int rowIndex{};
@@ -35,7 +35,7 @@ private:
 
     Ship *myShips = nullptr;
 
-    map<string, int> alphaLookup_;
+    map<string, int> charactersLookup;
 
 public:
     Board();

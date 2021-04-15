@@ -1,3 +1,6 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
 #include <string>
 #include <vector>
 #include <map>
@@ -10,14 +13,14 @@ using namespace std;
 
 class Config {
   private:
-    int rows; //board rows
-    int columns; // board columns
+    int rows;
+    int columns;
     map<string,int> ships;
 
-    // Reads the board's rows and columns and returns whether the action was successful or not
+    // Reads the board's rows and columns
     bool readBoard(string configLine, int index);
 
-    // Reads the ship's name and length and returns whether the action was successful or not
+    // Reads the ship's name and length
     bool readShips(string configLine, int index);
 
 
@@ -25,15 +28,15 @@ class Config {
   public:
     Config() {}
 
-   // Reads the config file provided and returns whether the action was successful or not
+   // Reads the config file
     bool readConfigFile();
 
-   // Getter for number of rows
+   // Gets the number of rows
     int getRows() {
       return rows;
     }
 
-    // Getter for number of columns
+    // Gets the number of columns
     int getColumns() {
       return columns;
     }
@@ -45,3 +48,5 @@ class Config {
 
   void readDataFromFile(bool& boardRead, bool& shipsRead);
 };
+
+#endif

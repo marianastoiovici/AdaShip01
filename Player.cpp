@@ -1,11 +1,12 @@
 #include "Player.h"
 
-#include <utility>
-
+//#include <utility>
+//Player overloaded constructor that initialises member variables with default values
 Player::Player(int rows, int columns, const map<string, int> &boats, map<string, int> alphaLookup_) {
     board = new Board(rows, columns, boats, alphaLookup_);
 }
 
+//Player destructor
 Player::~Player() {
     delete board;
 }
@@ -23,15 +24,6 @@ bool Player::getShot(const string &coordinate) {
 
 }
 
-//void Player::resetBoard() const{
-//  Board * oldBoard = getBoard();
-//  int rows = oldBoard->getRows();
-//  int columns = oldBoard->getColumns();
-//  map<string,int> boats = oldBoard->getBoats();
-//  delete board;
-//   *board = new Board( rows,columns, boats);
-//
-//}
 Board *Player::getBoard() const {
     return board;
 }

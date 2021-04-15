@@ -1,6 +1,8 @@
+#ifndef HELPERS_H
+#define HELPERS_H
+
 #include <iostream>
 #include <random>
-#include "algorithm" //for transform
 #include <sstream>
 #include "map"
 
@@ -10,8 +12,6 @@ static const char *const INVALID_COORDINATE = "target invalid";
 
 class Helpers {
 public:
-    //TODO: improve columnNames to contain generated names based on the nr of columns.
-//  TODO: if improved, check coordinates that reads the first char as the columns. for AA12 - AA needs to be the column name
 
     static int getRandomInt(int min, int max);
 
@@ -27,5 +27,8 @@ public:
 
     static string getRandomCoordinate(int rows, int columns);
 
+    //TODO: columnNames to contain columns over the length of alphabet
     static vector<string> columnNames;
 };
+
+#endif

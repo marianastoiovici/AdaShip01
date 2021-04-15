@@ -1,17 +1,16 @@
 #include <iostream>
-#include "algorithm" //for transform
-
+//#include "algorithm" //for transform
 using namespace std;
 
 #include "GameController.h"
 
 
 // Constructor for GameController.
-GameController::GameController(Config config) { // TODO review instance variables
+GameController::GameController(Config config) {
     rows = config.getRows();
     columns = config.getColumns();
     configBoats = config.getShipsToPlace();
-    alphaLookup_ = initialiseLookup();
+    charactersLookup = initialiseLookup();
 }
 
 GameController::~GameController() {
@@ -47,10 +46,8 @@ GameController::~GameController() {
     }
 }
 
-
 void GameController::getPlayerMenu(Player *player, int playerTurn) {
     while (player_1Turn) {
-        // display the options and get user's input
         string userInput;
         cout << "\nWhat would you like to do: \n";
         if (!player->allShipsPlaced()) {
@@ -107,20 +104,21 @@ void GameController::setupPlayer(Player *player, int turn) {
     }
     player->getBoard()->initializeBoard();
     player->getBoard()->printShips();
-
     getPlayerMenu(player, turn);
 }
 
 
 // Start a game
 void GameController::startGame(bool isGameWithAI) {
+    //set first turn to player 1
     player_1Turn = 1;
     cout << "\n\t Setting up the game! " << "\n";
 
-    player_1 = new Player(rows, columns, configBoats, alphaLookup_);
+    // Setup phase
+    player_1 = new Player(rows, columns, configBoats, charactersLookup);
     setupPlayer(player_1, player_1Turn);
 
-    player_2 = new Player(rows, columns, configBoats, alphaLookup_);
+    player_2 = new Player(rows, columns, configBoats, charactersLookup);
     if (isGameWithAI) {
         cout << "\n" << "AI places ships " << "\n";
         player_2->getBoard()->initializeBoard();
@@ -130,7 +128,6 @@ void GameController::startGame(bool isGameWithAI) {
         } else {
             cout << "Press Enter to let other player take its turn: ";
         }
-
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         pause(0);
     } else {
@@ -138,7 +135,8 @@ void GameController::startGame(bool isGameWithAI) {
     }
     cout << "\n\033[1;31mPlayers are set. It's time to shoot your targets. Good luck!\033[0m"
          << "\n";
-    play(isGameWithAI, alphaLookup_);
+    //Play phase
+    play(isGameWithAI, charactersLookup);
 }
 
 // Quit the game
@@ -148,7 +146,6 @@ void GameController::quit() {
 
 }
 
-// TODO: give turn as input to refactor function
 void GameController::play(bool ai, map<string, int> alphaLookup_) {
     while (!gameOver) {
         try {
@@ -174,11 +171,9 @@ void GameController::play(bool ai, map<string, int> alphaLookup_) {
                     cout << "\n\n \033[1;31mPlayer 2's turn to shoot!\033[0m" << "\n";
                     player_2->getBoard()->printMyGrid();
                     player_2->getBoard()->printOpponentGrid();
-//            cout << "\n\033[1;31mPlayer 2: \033[0m";
                     string coordinate = Helpers::getInput("Where would you like to shoot: ");
                     target = Helpers::getCoordinate(coordinate, alphaLookup_, rows);
                 }
-// TODO: need to check if target is valid based oon how many columns I have , might be H14, so length is 3
                 if (target.length() != 2) {
                     cout << "\n\033[1;31mInvalid coordinate! Please try again.\033[0m\n";
                 }
@@ -205,12 +200,10 @@ void GameController::play(bool ai, map<string, int> alphaLookup_) {
 
 bool GameController::isHumanPlayerTurn() const { return player_1Turn == 1; }
 
-void GameController::shoot(const string &coordinate) // TODO: can add playerTurn param from play()
-{
+void GameController::shoot(const string &coordinate) {
     bool hit = false;
 
-    if (player_1Turn) //daca este player1 turn
-    {
+    if (player_1Turn) {
         hit = player_2->getShot(coordinate); //check player_2 has a ship at the location or not
         player_1->shootCoordinate(coordinate, hit); //update hit marker for player_1
 
@@ -246,14 +239,11 @@ void GameController::checkGameOver() {
             cout << "PLAYER 2 WINS!\n";
         }
     }
-
 }
 
+//Method to switch turns between players
 void GameController::pause(int turn) {
-
-    //cout << "Press Enter to let other player take its turn: ";
-    //cin.ignore(numeric_limits<streamsize>::max(),'\n');
-    cout << "\nSwitched turns\n";
+    cout << "\n\nSwitched turns\n\n";
     if (turn == 1) {
         player_1Turn = 0;
     } else {
@@ -261,32 +251,23 @@ void GameController::pause(int turn) {
     }
 }
 
-
-/** Converts the given column number to its Excel-style representation. */
 string GameController::columnToString(int column) {
     const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     string alpha = "";
-    // if the number is above 26, then an additional character (representing the
-    // integer quotient when divided by 26) is prepended
+
     if (column > 26) {
         alpha += alphabet[(column - 1) / 26 - 1];
     }
-    // the final character represents the remainder when divided by 26
     alpha += alphabet[(column - 1) % 26];
     return alpha;
 }
 
-/** Populates the mapping from Excel-style column names to column numbers. */
 map<string, int> GameController::initialiseLookup() {
-    // populate an 'alpha to column number' lookup map
-
-    map<string, int> alphaLookup_;
-
+    map<string, int> charactersLookup;
     for (int i = 1; i <= columns; i++) {
-        alphaLookup_[columnToString(i)] = i;
+        charactersLookup[columnToString(i)] = i;
     }
-
-    return alphaLookup_;
+    return charactersLookup;
 }
 
 GameOptions GameController::resolveOption(std::string input) {

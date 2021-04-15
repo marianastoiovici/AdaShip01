@@ -27,8 +27,7 @@ string Helpers::getRandomDirection() {
 string Helpers::getDirectionInput() {
     string directionInput;
     cout << "\nHORIZONTAL(H/h) OR VERTICAL(V/v) orientation: ";
-    getline(std::cin,
-            directionInput);
+    getline(std::cin, directionInput);
     return directionInput;
 }
 
@@ -49,7 +48,7 @@ string Helpers::getInput(string question) {
 
 string Helpers::getCoordinate(string coordinate, map<string, int> map, int rows) {
     int index = 0;
-    // get the alphabetic part of the string
+    // get the alphabetic part from the string
     string alphabetic;
     while (index < coordinate.length() && isalpha(coordinate[index])) {
         alphabetic += toupper(coordinate[index]);
@@ -61,7 +60,7 @@ string Helpers::getCoordinate(string coordinate, map<string, int> map, int rows)
         return INVALID_COORDINATE;
     }
 
-    // get the number part
+    // get the number part from the string
     string numeric;
     while (index < coordinate.length() && isdigit(coordinate[index])) {
         numeric += coordinate[index];
@@ -69,14 +68,14 @@ string Helpers::getCoordinate(string coordinate, map<string, int> map, int rows)
     }
 
     // if we're not at the end of the string, or the numeric part is
-    // empty, return (0, 0)
+    // empty,return invalid coordinate
     if (index < coordinate.length() || numeric.length() == 0) {
         return INVALID_COORDINATE;
     }
     // get the row
     int row = stoi(numeric);
 
-    // if the row > the total number of my board's rows, return (0, 0)
+    // if the row > the total number of the board's rows, return invalid coordinate
     if (row > rows) {
         return INVALID_COORDINATE;
     }

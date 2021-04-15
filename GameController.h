@@ -1,3 +1,7 @@
+#ifndef GAMECONTROLLER_H
+#define GAMECONTROLLER_H
+
+#include <iostream>
 #include <string>
 #include <vector>
 #include <map>
@@ -26,22 +30,15 @@ enum PlayerOptions {
 
 static const char *const INVALID_MENU_OPTION = "Please enter a valid option.\n\n";
 
-//Creates and sets up the game, controlling the program.
+//GameController creates and sets up the game, controlling the program.
 class GameController {
 private:
     int rows;
     int columns;
     map<string, int> configBoats;
-
-    GameOptions resolveOption(string input);
-
-    PlayerOptions resolvePlayerOption(string input);
-
     Player *player_1{};        //player object for player1
     Player *player_2{};        //player object for player2
-//  static int player_1Turn; //true if player1 turn, false if player2 turn
-    bool
-            gameOver = false;    //game over to stop the while loop once the game ends
+    bool gameOver = false;    //game over to stop the while loop once the game ends
 
     void startGame(bool isGameWithAI);
 
@@ -51,15 +48,22 @@ private:
 
     void setupPlayer(Player *player, int turn);
 
-    map<string, int> alphaLookup_;
+    map<string, int> charactersLookup;
+
+    GameOptions resolveOption(string input);
+
+    PlayerOptions resolvePlayerOption(string input);
+
 public:
-    int player_1Turn; //true if player1 turn, false if player2 turn
-    // Constructor method for GameController.
+
+    // Constructor for GameController.
     explicit GameController(Config config);
 
     ~GameController();
 
     [[noreturn]] void menu();
+
+    int player_1Turn; //true if player1 turn, false if player2 turn
 
     void shoot(const string &coordinate);
 
@@ -69,10 +73,11 @@ public:
 
     void pause(int turn);
 
-
     string columnToString(int column);
 
     map<string, int> initialiseLookup();
 
     bool isHumanPlayerTurn() const;
 };
+
+#endif
