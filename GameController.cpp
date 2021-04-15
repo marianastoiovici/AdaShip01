@@ -47,6 +47,7 @@ GameController::~GameController() {
 }
 
 void GameController::getPlayerMenu(Player *player, int playerTurn) {
+  // TODO: fix implementation top give menu to second human player!!
     while (player_1Turn) {
         string userInput;
         cout << "\nWhat would you like to do: \n";
