@@ -46,55 +46,101 @@ GameController::~GameController() {
     }
 }
 
-void GameController::getPlayerMenu(Player *player, int playerTurn) {
+void GameController::getPlayerMenu(Player* player, int playerTurn) {
   // TODO: fix implementation top give menu to second human player!!
+  if (player_1Turn) {
     while (player_1Turn) {
-        string userInput;
-        cout << "\nWhat would you like to do: \n";
-        if (!player->allShipsPlaced()) {
-            cout << "\t1 - Place available ships automatically\n";
-            cout << "\t2 - Place ships manually\n";
-        }
-        if (player->allShipsPlaced()) {
-            cout << "\t3 - Give turn to other player\n";
-        }
-        cout << "\t4 - Reset your board\n";
-        cout << "\tq - Quit\n";
-        getline(cin, userInput);
-        switch (resolvePlayerOption(userInput)) {
-            case Player_Option1:
-                if (player->allShipsPlaced()) {
-                    cout << INVALID_MENU_OPTION;
-                    break;
-                }
-                player->getBoard()->placeAllShipsAutomatically();
-                break;
-            case Player_Option2:
-                if (player->allShipsPlaced()) {
-                    cout << INVALID_MENU_OPTION;
-                    break;
-                }
-                player->getBoard()->placeAllShipsManually();
-                break;
-            case Player_Option3:
-                if (!player->allShipsPlaced()) {
-                    cout << INVALID_MENU_OPTION;
-                    break;
-                }
-                pause(playerTurn);
-                break;
-            case Player_Reset:
-                player->getBoard()->initializeBoard();
-                player->getBoard()->printShips();
-                break;
-            case Player_Quit:
-                quit();
-                break;
-            case Player_OptionInvalid:
-                cout << INVALID_MENU_OPTION;
-            default:;
-        }
+      string userInput;
+      cout << "\nWhat would you like to do: \n";
+      if (!player->allShipsPlaced()) {
+        cout << "\t1 - Place available ships automatically\n";
+        cout << "\t2 - Place ships manually\n";
+      }
+      if (player->allShipsPlaced()) {
+        cout << "\t3 - Give turn to other player\n";
+      }
+      cout << "\t4 - Reset your board\n";
+      cout << "\tq - Quit\n";
+      getline(cin, userInput);
+      switch (resolvePlayerOption(userInput)) {
+        case Player_Option1:
+          if (player->allShipsPlaced()) {
+            cout << INVALID_MENU_OPTION;
+            break;
+          }
+          player->getBoard()->placeAllShipsAutomatically();
+          break;
+        case Player_Option2:
+          if (player->allShipsPlaced()) {
+            cout << INVALID_MENU_OPTION;
+            break;
+          }
+          player->getBoard()->placeAllShipsManually();
+          break;
+        case Player_Option3:
+          if (!player->allShipsPlaced()) {
+            cout << INVALID_MENU_OPTION;
+            break;
+          }
+          pause(playerTurn);
+          return;
+
+        case Player_Reset:player->getBoard()->initializeBoard();
+          player->getBoard()->printShips();
+          break;
+        case Player_Quit:quit();
+          break;
+        case Player_OptionInvalid:cout << INVALID_MENU_OPTION;
+        default:;
+      }
     }
+  } else {
+    while (!player_1Turn) {
+      string userInput;
+      cout << "\nWhat would you like to do: \n";
+      if (!player->allShipsPlaced()) {
+        cout << "\t1 - Place available ships automatically\n";
+        cout << "\t2 - Place ships manually\n";
+      }
+      if (player->allShipsPlaced()) {
+        cout << "\t3 - Give turn to other player\n";
+      }
+      cout << "\t4 - Reset your board\n";
+      cout << "\tq - Quit\n";
+      getline(cin, userInput);
+      switch (resolvePlayerOption(userInput)) {
+        case Player_Option1:
+          if (player->allShipsPlaced()) {
+            cout << INVALID_MENU_OPTION;
+            break;
+          }
+          player->getBoard()->placeAllShipsAutomatically();
+          break;
+        case Player_Option2:
+          if (player->allShipsPlaced()) {
+            cout << INVALID_MENU_OPTION;
+            break;
+          }
+          player->getBoard()->placeAllShipsManually();
+          break;
+        case Player_Option3:
+          if (!player->allShipsPlaced()) {
+            cout << INVALID_MENU_OPTION;
+            break;
+          }
+          pause(playerTurn);
+          break;
+        case Player_Reset:player->getBoard()->initializeBoard();
+          player->getBoard()->printShips();
+          break;
+        case Player_Quit:quit();
+          break;
+        case Player_OptionInvalid:cout << INVALID_MENU_OPTION;
+        default:;
+      }
+    }
+  }
+
 }
 
 void GameController::setupPlayer(Player *player, int turn) {
@@ -182,7 +228,7 @@ void GameController::play(bool ai, map<string, int> alphaLookup_) {
 
             shoot(target);
             if (!gameOver) {
-                if (isHumanPlayerTurn()) {
+                if (ai && isHumanPlayerTurn()) {
                     cout << "Press Enter to let AI take its turn: ";
                 } else {
                     cout << "Press Enter to let other player take its turn: ";

@@ -49,7 +49,7 @@ the structure of the overall project.
     - [] Fix board to display columns up to 80
     - [x] Fix boat placement for coordinate 6H instead of H6
     - [x] Press Enter to let other player take its turn -> Press Enter to let "player 1/2" take its turn
-    - [] Fix Player menu to let second player use it (switch from using the player's turn)
+    - [x] Fix Player menu to let second player use it (switch from using the player's turn)
 
 
 **Class diagram:**
